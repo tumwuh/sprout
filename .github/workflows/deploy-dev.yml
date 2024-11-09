@@ -1,0 +1,61 @@
+name: Build and Deploy PocketBase to Dev EC2 via GHCR
+on:
+  push:
+    branches:
+      - dev # Trigger on push to develop branch
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build and Tag Docker Image
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/sprout-app:dev .
+
+      - name: Push Docker Image to GHCR
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/sprout-app:dev
+
+  run-tests:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run tests
+        run: bun run test
+
+  deploy-to-dev-ec2:
+    needs: [build-and-push, run-tests]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set Up SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Pull Docker Image on Dev EC2 and Restart Container
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.EC2_USER }}@${{ secrets.DEV_EC2_HOST }} << 'EOF'
+            echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            sudo docker pull ghcr.io/${{ github.repository_owner }}/v-app:dev
+            sudo docker stop sprout-dev || true
+            sudo docker rm sprout-dev || true
+            sudo docker run -d --name sprout-dev -p 3000:3000 ghcr.io/${{ github.repository_owner }}/sprout-app:dev
+          EOF
