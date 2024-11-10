@@ -12,13 +12,16 @@
   },
   "dependencies": {
     "@pinia/nuxt": "^0.7.0",
+    "@vueform/nuxt": "^1.7.0",
     "nuxt": "^3.14.159",
     "vue": "latest",
     "vue-router": "latest"
   },
   "devDependencies": {
     "@nuxt/test-utils": "^3.14.4",
+    "@playwright/test": "^1.48.2",
     "@testing-library/vue": "^8.1.0",
+    "@types/node": "^22.9.0",
     "@vue/test-utils": "^2.4.6",
     "autoprefixer": "^10.4.20",
     "daisyui": "^4.12.14",
