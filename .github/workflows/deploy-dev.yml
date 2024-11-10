@@ -1,8 +1,10 @@
 name: Build and Deploy PocketBase to Dev EC2 via GHCR
+
 on:
   push:
     branches:
       - dev # Trigger on push to develop branch
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -21,6 +23,15 @@ jobs:
       - name: Push Docker Image to GHCR
         run: |
           docker push ghcr.io/${{ github.repository_owner }}/sprout-app:dev
+
+      # Save Docker image as an artifact for use in later jobs
+      - name: Save Docker image as artifact
+        run: docker save ghcr.io/${{ github.repository_owner }}/sprout-app:dev -o sprout-app-dev.tar
+      - name: Upload Docker image artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: sprout-app-dev
+          path: sprout-app-dev.tar
 
   unit-tests:
     needs: build-and-push
@@ -47,6 +58,23 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 
+      - name: Download Docker image artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: sprout-app-dev
+          path: .
+
+      - name: Load Docker image
+        run: docker load -i sprout-app-dev.tar
+
+      - name: Start Docker container
+        run: |
+          docker run -d --name sprout-app-test -p 3000:3000 ghcr.io/${{ github.repository_owner }}/sprout-app:dev
+
+      - name: Wait for container to be ready
+        run: |
+          sleep 10 # Adjust this based on your app’s startup time
+
       - name: Set up Bun
         uses: oven-sh/setup-bun@v1
 
@@ -57,14 +85,19 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run Playwright tests
-        run: bun run playwright test
-
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+        run: bun run test:e2e
+        env:
+          BASE_URL: http://localhost:3000
+      - name: Upload Playwright Test Results
+        if: failure()
+        uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+
+      - name: Stop Docker container
+        run: docker stop sprout-app-test
 
   deploy-to-dev-ec2:
     needs: [build-and-push, e2e-tests]
