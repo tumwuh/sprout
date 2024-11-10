@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    @apply bg-green-300 dark:bg-[#2a313a] min-h-screen;
+}

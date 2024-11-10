@@ -5,7 +5,7 @@ export default {
     "./layouts/**/*.vue",
     "./pages/**/*.vue",
     "./plugins/**/*.{js,ts}",
-    "./app.vue",
+    "./index.vue",
     "./error.vue",
   ],
   theme: {

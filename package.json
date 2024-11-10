@@ -11,6 +11,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@nuxtjs/google-fonts": "^3.2.0",
     "@pinia/nuxt": "^0.7.0",
     "@vueform/nuxt": "^1.7.0",
     "nuxt": "^3.14.159",
