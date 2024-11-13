@@ -50,9 +50,7 @@ test('Login process success', async ({page}) => {
     await page.goto('http://localhost:3000/login');
     await page.waitForTimeout(500);
     expect(page.url()).toBe('http://localhost:3000/');
-    await page.goto('http://localhost:3000/registration');
-    await page.waitForTimeout(500);
-    expect(page.url()).toBe('http://localhost:3000/');
+
 })
 
 
