@@ -3,7 +3,7 @@ import { defineVitestConfig } from '@nuxt/test-utils/config'
 export default defineVitestConfig({
     test: {
         environment: 'nuxt',
-        include: ['test/**/*.spec.ts'],
+        include: ['test/**/*.test.ts'],
         exclude: ['e2e/**/*.spec.ts'],
         // you can optionally set Nuxt-specific environment options
         // environmentOptions: {

@@ -61,5 +61,5 @@ export default defineNuxtConfig({
             autoprefixer: {},
         },
     },
-    modules: ['@pinia/nuxt', '@nuxt/test-utils/module', '@vueform/nuxt', '@nuxtjs/google-fonts'],
+    modules: ['@pinia/nuxt', '@nuxt/test-utils/module', '@vueform/nuxt', '@nuxt/image'],
 })
