@@ -1,9 +1,12 @@
-name: Build and Deploy PocketBase to Dev EC2 via GHCR
+name: Build and Deploy Sprout app to Dev EC2 via GHCR
 
 on:
   push:
     branches:
-      - dev # Trigger on push to develop branch
+      - dev
+  pull_request:
+    branches:
+      - dev
 
 jobs:
   build-and-push:
@@ -11,7 +14,7 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -24,9 +27,9 @@ jobs:
         run: |
           docker push ghcr.io/${{ github.repository_owner }}/sprout-app:dev
 
-      # Save Docker image as an artifact for use in later jobs
       - name: Save Docker image as artifact
         run: docker save ghcr.io/${{ github.repository_owner }}/sprout-app:dev -o sprout-app-dev.tar
+
       - name: Upload Docker image artifact
         uses: actions/upload-artifact@v3
         with:
@@ -39,10 +42,12 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Bun
         uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
 
       - name: Install dependencies
         run: bun install
@@ -54,24 +59,49 @@ jobs:
     needs: build-and-push
     timeout-minutes: 60
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
       - name: Install dependencies
         run: bun install
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright
+        run: |
+          bunx playwright install --with-deps chromium
+          bunx playwright install-deps chromium
+
+      - name: Start application in background
+        run: |
+          bun run dev &
+          sleep 10
+
       - name: Run Playwright tests
         run: bun run test:e2e
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+        env:
+          CI: true
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
 
   deploy-to-dev-ec2:
-    needs: [ build-and-push, e2e-tests, unit-tests ]
+    needs: [build-and-push, e2e-tests, unit-tests]
     runs-on: ubuntu-latest
 
     steps:
