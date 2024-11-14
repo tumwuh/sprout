@@ -2,12 +2,19 @@
 import {useToaster} from "~/composables/useToaster";
 import Toaster from "~/components/Toaster.vue";
 import {useI18n} from 'vue-i18n'
+import {definePageMeta} from "#imports";
 
 const {registerUser, authenticationPageGuard} = useAuth()
 const {isVisible, message, showToaster, variant} = useToaster()
 const router = useRouter()
 const {t} = useI18n()
 
+definePageMeta({
+  pageTransition: {
+    name: 'slide-right',
+    mode: 'out-in'
+  },
+})
 
 onMounted(() => {
   authenticationPageGuard()

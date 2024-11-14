@@ -9,6 +9,9 @@ export default defineNuxtConfig({
             routes: ['/'],
         },
     },
+    routeRules: {
+        '/admin': {redirect: '/admin/dashboard'}
+    },
     app: {
         head: {
             htmlAttrs: {
