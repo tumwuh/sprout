@@ -32,8 +32,14 @@ RUN bun install
 # Expose the port the app runs on
 EXPOSE 3000
 
+# Set build arguments
+ARG BASE_API_URL
+ARG SESSION_PASSWORD
+
 # Set environment variables
 ENV NODE_ENV=production
+ENV BASE_API_URL=${BASE_API_URL}
+ENV SESSION_PASSWORD=${SESSION_PASSWORD}
 
 # Use a non-root user
 USER bun
