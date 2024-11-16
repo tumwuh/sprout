@@ -42,7 +42,7 @@ test('Login process success', async ({page}) => {
 
 
     await page.getByRole('button', {name: 'Masuk'}).click();
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000);
     await expect(page.getByText('Login berhasil!')).toBeVisible();
 
     await page.waitForTimeout(2000);
