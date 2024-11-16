@@ -57,5 +57,9 @@ jobs:
             sudo docker pull ghcr.io/${{ github.repository_owner }}/sprout-app:dev
             sudo docker stop sprout-dev || true
             sudo docker rm sprout-dev || true
-            sudo docker run -d --name sprout-dev -p 3000:3000 ghcr.io/${{ github.repository_owner }}/sprout-app:dev
+            sudo docker run -d  --name sprout-dev \ 
+                -e NODE_ENV=production \
+                -e BASE_API_URL=$DEV_BASE_API_URL \
+                -e SESSION_PASSWORD=$SESSION_PASSWORD \
+                -p 3000:3000 ghcr.io/${{ github.repository_owner }}/sprout-app:dev
           EOF
