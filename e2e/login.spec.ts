@@ -42,7 +42,7 @@ test('Login process success', async ({page}) => {
 
 
     await page.getByRole('button', {name: 'Masuk'}).click();
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(500);
     await expect(page.getByText('Login berhasil!')).toBeVisible();
 
     await page.waitForTimeout(2000);
@@ -76,7 +76,7 @@ test('Login process failed', async ({page}) => {
     await page.fill('input[name=email]', 'test@example.com');
     await page.fill('input[name=password]', 'wrongpassword');
     await page.getByRole('button', {name: 'Masuk'}).click();
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000);
     await expect(page.getByText('Login gagal!')).toBeVisible();
     await page.waitForTimeout(2000);
     expect(page.url()).toBe('http://localhost:3000/login');
