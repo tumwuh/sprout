@@ -1,9 +1,6 @@
 name: Validating data before merging
 
 on:
-  push:
-    branches:
-      - dev
   pull_request:
     branches:
       - dev

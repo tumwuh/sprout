@@ -1,11 +1,9 @@
 name: Build and Deploy Sprout app to Dev EC2 via GHCR
 
 on:
-  pull_request_review:
+  push:
     branches:
       - dev
-    types:
-      - submitted
 
 jobs:
   build-and-push:
@@ -35,7 +33,7 @@ jobs:
           path: sprout-app-dev.tar
 
   deploy-to-dev-ec2:
-    needs: [build-and-push]
+    needs: [ build-and-push ]
     runs-on: ubuntu-latest
 
     steps:
