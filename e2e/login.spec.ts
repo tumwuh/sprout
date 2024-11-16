@@ -34,9 +34,10 @@ test('Validate email format', async ({page}) => {
 
 
 test('Login process success', async ({page}) => {
+
     await page.goto('http://localhost:3000/login');
 
-    await page.fill('input[name=email]', 'testsambel@gmail.com');
+    await page.fill('input[name=email]', 'teamtest1@gmail.com');
     await page.fill('input[name=password]', 'tesspass');
 
 
@@ -46,9 +47,10 @@ test('Login process success', async ({page}) => {
 
     await page.waitForTimeout(2000);
     expect(page.url()).toBe('http://localhost:3000/');
+    await expect(page.getByRole('button', { name: 'Profile picture' })).toBeVisible();
 
     await page.goto('http://localhost:3000/login');
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(2000);
     expect(page.url()).toBe('http://localhost:3000/');
 
 })
@@ -56,7 +58,7 @@ test('Login process success', async ({page}) => {
 
 test('Login process failed', async ({page}) => {
     await page.route('**/api/collections/users/auth-with-password', route => route.fulfill({
-        status: 200,
+        status: 400,
         body: JSON.stringify({
             "code": 400,
             "message": "Failed to authenticate.",
@@ -78,4 +80,21 @@ test('Login process failed', async ({page}) => {
     await expect(page.getByText('Login gagal!')).toBeVisible();
     await page.waitForTimeout(2000);
     expect(page.url()).toBe('http://localhost:3000/login');
+});
+
+
+test('Login process success as a organizer', async ({page}) => {
+    await page.goto('http://localhost:3000/login');
+
+    await page.fill('input[name=email]', 'organizer1@gmail.com');
+    await page.fill('input[name=password]', 'tesspass');
+
+
+    await page.getByRole('button', {name: 'Masuk'}).click();
+    await page.waitForTimeout(500);
+    await expect(page.getByText('Login berhasil!')).toBeVisible();
+
+    await page.waitForTimeout(3000);
+    expect(page.url()).toBe('http://localhost:3000/admin/dashboard');
+    await expect(page.getByRole('link', { name: 'Turnamen' })).toBeVisible();
 });

@@ -1,4 +1,4 @@
-import {pb} from "~/pocketbase.config";
+import {useNuxtApp} from '#app';
 
 export type TUser = {
     id?: string;
@@ -16,29 +16,32 @@ export type TUser = {
 }
 
 const useAuth = () => {
-    const user = pb.authStore
-    const router  = useRouter()
+    const {$pb} = useNuxtApp()
+    const user = $pb.authStore
+    const router = useRouter()
+
 
     const authenticationPageGuard = () => {
         user.isValid ? router.push('/') : null
     }
 
     const registerUser = async (formData: TUser) => {
-       try {
-           return await pb.collection('users').create(formData)
-       }catch (e) {
-           console.log(e);
-       }
+        try {
+            return await $pb.collection('users').create(formData)
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     const authWithEmailPassword = async (email: string, password: string) => {
         try {
-            return await pb.collection('users').authWithPassword(
+            return await $pb.collection('users').authWithPassword(
                 email,
                 password,
             )
-        }catch (e) {
+        } catch (e) {
             console.log(e);
+            return null
         }
     }
 

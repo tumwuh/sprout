@@ -2,6 +2,7 @@
 
 definePageMeta({
   layout: "admin",
+  middleware: ["is-admin"]
 });
 </script>
 
