@@ -2,6 +2,8 @@ name: Build and Deploy Sprout app to Dev EC2 via GHCR
 
 on:
   pull_request_review:
+    branches:
+      - dev
     types:
       - submitted
 
