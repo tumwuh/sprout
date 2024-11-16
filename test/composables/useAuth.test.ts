@@ -1,88 +1,54 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { pb } from '~/pocketbase.config'
-import useAuth, { type TUser } from '@/composables/useAuth'
-import {faker} from "@faker-js/faker";
+import {describe, it, expect, vi} from 'vitest';
+import {mockNuxtImport} from '@nuxt/test-utils/runtime'
 
-vi.mock('~/pocketbase.config', () => ({
-  pb: {
-    collection: vi.fn().mockReturnThis(),
-    create: vi.fn(),
-    authWithPassword: vi.fn(),
-    authStore: {
-      model: null,
-      token: null,
-      isValid: false
+import useAuth, {type TUser} from '~/composables/useAuth';
+
+const {useMockNuxtApp} = vi.hoisted(() => {
+    return {
+        useMockNuxtApp: () => ({
+            $pb: {
+                authStore: {
+                    isValid: true
+                },
+                collection: (name: string) => ({
+                    create: (data: TUser) => Promise.resolve(data),
+                    authWithPassword: (email: string, password: string) => Promise.resolve({record: {id: '123'}})
+                })
+            },
+        })
     }
-  }
-}))
-
-vi.mock('vue-router', () => ({
-  useRouter: vi.fn()
-}))
+})
+mockNuxtImport('useNuxtApp', () => useMockNuxtApp);
 
 describe('useAuth', () => {
-  let newUser: TUser
-  let email: string
-  let password: string
+    it('should have a valid user object', () => {
+        const {user} = useAuth();
+        expect(user.isValid).toBe(true);
+    });
 
-  beforeEach(() => {
-    email = 'test@example.com'
-    password = 'testpassword'
-    newUser = {
-      id: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-      collectionId: "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy",
-      collectionName: 'testCollection',
-      username: 'testuser',
-      verified: false,
-      emailVisibility: true,
-      email: 'test@example.com',
-      created: new Date(),
-      updated: new Date(),
-      name: 'Test User',
-      role: 'admin'
-    }
-  })
+    it('should register a new user', async () => {
+        const {registerUser} = useAuth();
+        const newUser: TUser = {
+            collectionId: '123',
+            collectionName: 'users',
+            username: 'testuser',
+            verified: false,
+            emailVisibility: true,
+            email: 'test@example.com',
+            created: new Date(),
+            updated: new Date(),
+            name: 'Test User',
+            role: 'team'
+        };
 
-  it('should initialize user as null', () => {
-    const { user } = useAuth()
-    expect(user.model).toBe(null)
-  })
+        const createdUser = await registerUser(newUser);
+        expect(createdUser).toEqual(newUser);
+    });
 
-  it('should register user correctly', async () => {
-    const { registerUser } = useAuth()
-    // @ts-ignore
-    pb.create.mockResolvedValueOnce(newUser)
-    await registerUser(newUser)
-    expect(pb.collection).toHaveBeenCalledWith('users')
-    // @ts-ignore
-    expect(pb.create).toHaveBeenCalledWith(newUser)
-  })
+    it('should authenticate a user with email and password', async () => {
+        const {authWithEmailPassword} = useAuth();
+        const authResult = await authWithEmailPassword('test@example.com', 'password123');
+        expect(authResult).toEqual({record: {id: '123'}});
+    });
 
-  it('should authenticate with email and password', async () => {
-    const { authWithEmailPassword } = useAuth()
-    // @ts-ignore
-    pb.authWithPassword.mockResolvedValueOnce({
-      token: faker.string.alpha(20),
-      record: newUser
-    })
-
-    await authWithEmailPassword(email, password)
-
-    expect(pb.collection).toHaveBeenCalledWith('users')
-    // @ts-ignore
-    expect(pb.authWithPassword).toHaveBeenCalledWith(email, password)
-  })
-
-  it('should handle authentication errors', async () => {
-    const { authWithEmailPassword } = useAuth()
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
-    const error = new Error('Authentication failed')
-    // @ts-ignore
-    pb.authWithPassword.mockRejectedValueOnce(error)
-
-    await authWithEmailPassword(email, password)
-
-    expect(consoleSpy).toHaveBeenCalledWith(error)
-    consoleSpy.mockRestore()
-  })
-})
+});

@@ -12,6 +12,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@nuxt/icon": "^1.7.5",
     "@nuxt/image": "^1.8.1",
     "@pinia/nuxt": "^0.7.0",
     "@vueform/nuxt": "^1.7.0",

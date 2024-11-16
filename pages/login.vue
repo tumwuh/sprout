@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import {useToaster} from "~/composables/useToaster";
 import Toaster from "~/components/Toaster.vue";
-import { useI18n } from 'vue-i18n'
-import {definePageMeta} from "#imports";
+import {useI18n} from 'vue-i18n'
+import {definePageMeta, TUser} from "#imports";
+import type {RecordAuthResponse, RecordModel} from "pocketbase";
 
-const {authWithEmailPassword, authenticationPageGuard} = useAuth()
+const {authWithEmailPassword, authenticationPageGuard, user} = useAuth()
+const userStore = useUserStore()
 const {isVisible, message, showToaster, variant} = useToaster()
 const router = useRouter()
+const buttonLoading = ref(false)
 const {t} = useI18n()
+
 
 definePageMeta({
   pageTransition: {
@@ -20,23 +24,32 @@ onMounted(() => {
   authenticationPageGuard()
 })
 const handleSubmit = async (FormData, form$) => {
-  form$.submitting = true
+  buttonLoading.value = true
   authWithEmailPassword(FormData.data.email, FormData.data.password)
-      .then((res: any) => {
-        if (res.code) {
-          showToaster(t('loginError'), 3000, 'error')
-          return
+      .then((res: RecordAuthResponse<RecordModel> | null) => {
+        if (res) {
+          showToaster(t('loginSuccess'), 3000, 'success')
+          setTimeout(() => {
+            console.log(res.record);
+            if (['admin', 'organizer'].includes(res.record.role)) {
+              router.push('/admin')
+              return
+            }
+            router.push('/')
+          }, 1000)
+          return;
         }
-        showToaster(t('loginSuccess'), 3000, 'success')
-        setTimeout(() => {
-          router.push('/')
-        }, 1000)
+
+        showToaster(t('loginError'), 3000, 'error')
+        userStore.setUser(res as unknown as TUser)
+        return
+
       })
       .catch(err => {
         console.log(err);
       })
       .finally(() => {
-        form$.submitting = false
+        buttonLoading.value = false
       })
 }
 
@@ -76,6 +89,7 @@ const handleSubmit = async (FormData, form$) => {
                   :submits="true"
                   button-label="Masuk"
                   :full="true"
+                  :loading="buttonLoading"
                   size="lg"
               ></button-element>
             </vueform>

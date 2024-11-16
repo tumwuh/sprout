@@ -65,5 +65,11 @@ export default defineNuxtConfig({
             autoprefixer: {},
         },
     },
-    modules: ['@pinia/nuxt', '@nuxt/test-utils/module', '@vueform/nuxt', '@nuxt/image'],
+    runtimeConfig: {
+        sessionPassword: process.env.SESSION_PASSWORD,
+        public: {
+            baseApiUrl: process.env.BASE_API_URL,
+        }
+    },
+    modules: ['@pinia/nuxt', '@nuxt/test-utils/module', '@vueform/nuxt', '@nuxt/image', '@nuxt/icon'],
 })

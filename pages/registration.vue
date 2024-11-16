@@ -7,6 +7,7 @@ import {definePageMeta} from "#imports";
 const {registerUser, authenticationPageGuard} = useAuth()
 const {isVisible, message, showToaster, variant} = useToaster()
 const router = useRouter()
+const buttonLoading = ref(false)
 const {t} = useI18n()
 
 definePageMeta({
@@ -20,7 +21,7 @@ onMounted(() => {
   authenticationPageGuard()
 })
 const handleSubmit = async (FormData, form$) => {
-  form$.submitting = true
+  buttonLoading.value = true
   registerUser(FormData.data)
       .then((res: any) => {
         if (res.code) {
@@ -36,7 +37,7 @@ const handleSubmit = async (FormData, form$) => {
         console.log(err);
       })
       .finally(() => {
-        form$.submitting = false
+        buttonLoading.value = false
       })
 }
 </script>
@@ -50,7 +51,7 @@ const handleSubmit = async (FormData, form$) => {
         <div class="mx-4 mt-6">
           <client-only>
             <Vueform :endpoint="false" validate-on="submit" @submit="handleSubmit" :display-errors="false">
-              <hidden-element name="role" value="team"></hidden-element>
+              <hidden-element name="role" default="team"></hidden-element>
               <text-element
                   name="name"
                   placeholder="Nama tim"
@@ -90,6 +91,7 @@ const handleSubmit = async (FormData, form$) => {
               ></text-element>
               <button-element
                   name="submit"
+                  :loading="buttonLoading"
                   :submits="true"
                   button-label="Daftar"
                   :full="true"
@@ -107,7 +109,3 @@ const handleSubmit = async (FormData, form$) => {
     </div>
   </div>
 </template>
-
-<style scoped>
-
-</style>
