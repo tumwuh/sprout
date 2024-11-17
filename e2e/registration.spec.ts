@@ -1,5 +1,6 @@
 import {test, expect} from '@playwright/test';
 import {sleep} from "@antfu/utils";
+import {faker} from "@faker-js/faker";
 
 
 test('Has all component need to be', async ({page}) => {
@@ -36,7 +37,7 @@ test('Registration process success', async ({page}) => {
             "collectionName": "users",
             "created": "2024-11-12 15:42:58.310Z",
             "emailVisibility": false,
-            "id": "3dj3nrzxv31y4fk",
+            "id": faker.string.alpha(12),
             "name": "Test data",
             "role": "admin",
             "updated": "2024-11-12 15:42:58.310Z",

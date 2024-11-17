@@ -11,6 +11,7 @@ const buttonLoading = ref(false)
 const {t} = useI18n()
 
 definePageMeta({
+  middleware: 'prevent-authentication',
   pageTransition: {
     name: 'slide-right',
     mode: 'out-in'
