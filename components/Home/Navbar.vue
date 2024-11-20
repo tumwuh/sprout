@@ -1,10 +1,10 @@
 <script setup lang="ts">
-const {user} = useAuth()
-const userStore = useUserStore()
-const logOut = () => {
-  user.clear()
-}
+import {useI18n} from "vue-i18n";
 
+const {logOut} = useAuth()
+const userStore = useUserStore()
+const {t} = useI18n()
+const {data} = await useFetch('/api/my-detail')
 
 </script>
 <template>
@@ -17,19 +17,19 @@ const logOut = () => {
       <div class="navbar-center hidden lg:flex">
         <ul class="menu menu-horizontal px-1">
           <li class="light:btn-nav-home">
-            <nuxt-link to="/">Halaman Utama</nuxt-link>
+            <nuxt-link to="/">{{t('home')}}</nuxt-link>
           </li>
           <li class="light:btn-nav-home">
-            <nuxt-link to="/tournament">Turnamen</nuxt-link>
+            <nuxt-link to="/tournament">{{t('tournament')}}</nuxt-link>
           </li>
           <li class="light:btn-nav-home">
-            <nuxt-link to="/">Hubungi Kami</nuxt-link>
+            <nuxt-link to="/">{{t('contactUs')}}</nuxt-link>
           </li>
         </ul>
       </div>
       <div class="navbar-end">
-        <nuxt-link v-if="!userStore.user" to="/login" class="btn btn-ghost btn-sm mr-2">Masuk</nuxt-link>
-        <nuxt-link v-if="!userStore.user" to="/registration" class="btn btn-primary btn-sm">Daftar</nuxt-link>
+        <nuxt-link v-if="!userStore.user" to="/login" class="btn btn-ghost btn-sm mr-2">{{t('loginButton')}}</nuxt-link>
+        <nuxt-link v-if="!userStore.user" to="/registration" class="btn btn-primary btn-sm">{{t('register')}}</nuxt-link>
         <button test-id="notification-button" v-if="userStore.user" class="btn btn-ghost btn-circle">
           <div class="indicator">
             <svg
@@ -51,7 +51,7 @@ const logOut = () => {
           <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
             <div class="w-10 rounded-full">
               <nuxt-img
-                  :src="userStore.user.avatar !== '' ? user.model.avatar :  `https://api.dicebear.com/9.x/pixel-art/svg?seed=${userStore.user.name}`"
+                  :src="userStore.user?.avatar !== '' ? userStore.user.avatar :  `https://api.dicebear.com/9.x/pixel-art/svg?seed=${userStore.user.name}`"
                   alt="Profile picture"
                   class="rounded-full"></nuxt-img>
             </div>

@@ -31,7 +31,6 @@ const handleSubmit = async (FormData, form$) => {
         if (res) {
           showToaster(t('loginSuccess'), 3000, 'success')
           setTimeout(() => {
-            console.log(res.record);
             if (['admin', 'organizer'].includes(res.record.role)) {
               router.push('/admin')
               return
@@ -61,14 +60,14 @@ const handleSubmit = async (FormData, form$) => {
     <toaster :is-visible="isVisible" :message="message" :variant="variant"/>
     <div class="bg-base-100 w-96 shadow-xl px-4 py-6 rounded-xl">
       <div class="flex flex-col text-center gap-2 justify-center">
-        <h2 class="text-2xl font-bold text-green-700 dark:text-gray-300">Login Untuk Tim</h2>
-        <h4 class="font-serif font-medium">Masuk dan Mulai <br> Petualangan Kompetitifmu!</h4>
+        <h2 class="text-2xl font-bold text-green-700 dark:text-gray-300">{{t('loginFormTitle')}}</h2>
+        <h4 class="font-serif font-medium" v-html="t('loginSubtitle')"></h4>
         <client-only>
           <div class="mx-4 mt-6">
             <vueform validate-on="submit" :display-errors="false" @submit="handleSubmit" :endpoint="false">
               <text-element
                   name="email"
-                  placeholder="Email"
+                  :placeholder="t('email')"
                   input-type="email"
                   :rules="[
                     'required',
@@ -78,7 +77,7 @@ const handleSubmit = async (FormData, form$) => {
               <text-element
                   name="password"
                   input-type="password"
-                  placeholder="Kata sandi"
+                  :placeholder="t('password')"
                   :rules="[
                     'required',
                     'min:8',
@@ -88,26 +87,26 @@ const handleSubmit = async (FormData, form$) => {
               <button-element
                   name="submit"
                   :submits="true"
-                  button-label="Masuk"
+                  :button-label="t('loginButton')"
                   :full="true"
                   :loading="buttonLoading"
                   size="lg"
               ></button-element>
             </vueform>
-            <div class="flex justify-end">
-              <nuxt-link to="/forget-password" class="text-sm text-green-700 dark:text-gray-300">Lupa password
+            <div class="flex justify-end mt-2">
+              <nuxt-link to="/forget-password" class="text-sm text-green-700 dark:text-gray-300">{{t('forgotPassword')}}
               </nuxt-link>
             </div>
           </div>
         </client-only>
 
         <div class="mt-4">
-          <p>Belum punya akun?
-            <nuxt-link to="/registration" class="text-green-700 dark:text-gray-300">Daftar disini</nuxt-link>
+          <p>{{t('dontHaveAccount')}}
+            <nuxt-link to="/registration" class="text-green-700 dark:text-gray-300">{{t('registerHere')}}</nuxt-link>
           </p>
-          <div class="divider">Atau</div>
-          <p>Buat akun penyelengara
-            <nuxt-link to="/organizer-registration" class="text-green-700 dark:text-gray-300">Daftar disini</nuxt-link>
+          <div class="divider">{{t('or')}}</div>
+          <p>{{t('makeOrganizerAccount')}}
+            <nuxt-link to="/organizer-registration" class="text-green-700 dark:text-gray-300">{{t('registerHere')}}</nuxt-link>
           </p>
         </div>
       </div>
