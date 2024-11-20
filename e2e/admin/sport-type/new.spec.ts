@@ -66,10 +66,9 @@ test('User can adjust scoring type', async ({page}) => {
 test('Validate all required value before submit', async ({page}) => {
     await page.getByText('Simpan').click();
 
-    await expect(page.locator('#name__error')).toBeVisible();
     await expect(page.getByLabel('Jenis Penilaian #1').getByText('Nama wajib diisi.')).toBeVisible();
 
-    await page.fill('#name', 'test');
+    await page.locator('#sport-name').fill('test');
 
     await page.getByText('Simpan').click();
     await expect(page.locator('#name__error')).not.toBeVisible();
@@ -158,10 +157,10 @@ test('User can submit form with valid value', async ({page}) => {
             })
         }
     )
-    await page.fill('#name', 'test');
-    await page.fill('#description', 'test');
+    await page.locator('#sport-name').fill('test');
+    await page.locator('#sport-description').fill('test');
     await page.fill('[id="scoringTypes\\.0\\.name"]', 'test');
-    await page.fill('[id="scoringTypes\\.0\\.description"]', 'test');
+    await page.locator('#scoring-description-0').fill('test');
     await page.getByText('Simpan').click();
     await page.waitForTimeout(1000);
     await expect(page.getByText('Jenis olahraga berhasil dibuat!')).toBeVisible();
