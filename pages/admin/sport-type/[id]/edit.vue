@@ -83,7 +83,7 @@ const formValue = computed(() => {
   <div>
     <toaster :is-visible="isVisible" :message="message" :variant="variant"/>
     <section>
-      <h1 class="text-3xl font-semibold">{{ t('addSportType') }}</h1>
+      <h1 class="text-3xl font-semibold">{{ t('editSportType') }}</h1>
       <div class="breadcrumbs text-sm">
         <ul>
           <li>

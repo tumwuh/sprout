@@ -14,7 +14,24 @@ export default defineNuxtPlugin(({ vueApp }) => {
                 addData: 'Tambah Data',
                 save: 'Simpan',
                 noData: 'Tidak ada data',
-
+                logo: 'Logo',
+                pamflet: 'Pamflet',
+                startDate: 'Tanggal Mulai',
+                endDate: 'Tanggal Selesai',
+                registrationStartDate: 'Tanggal Mulai Pendaftaran',
+                registrationEndDate: 'Tanggal Selesai Pendaftaran',
+                contactPerson: 'Orang yang Dapat Dihubungi',
+                phoneNumber: 'Nomor Telepon',
+                isWaAvailable: 'Apakah Dapat Dihubungi Melalui WhatsApp?',
+                phoneNumberFormat: 'Format Nomor Handphone: 628xx-xxxx-xxxx',
+                leaveZeroIfFree: 'Masukan angka 0 jika biaya gratis',
+                registrationFee: 'Biaya Pendaftaran',
+                isIndividual: 'Pertadingan Individu',
+                minTeamMember: 'Jumlah Anggota Tim Minimum',
+                maxTeamMember: 'Jumlah Anggota Tim Maksimum',
+                isAgeRestriction: 'Batasan Usia?',
+                minAge: 'Usia Minimum',
+                maxAge: 'Usia Maksimum',
 
                 // Homepage Navbar
                 home: 'Halaman Utama',
@@ -44,7 +61,7 @@ export default defineNuxtPlugin(({ vueApp }) => {
 
                 // Admin page sidebar
                 dashboard: 'Dasbor',
-                sportType: 'Jenis Olahraga',
+                sportType: 'Cabang Olahraga',
                 tournament: 'Turnamen',
 
                 // Sport type page
@@ -63,9 +80,14 @@ export default defineNuxtPlugin(({ vueApp }) => {
                 tournamentTitle: 'Turnamen',
                 addTournament: 'Tambah Turnamen',
                 editTournament: 'Ubah Turnamen',
+                tournamentDetail: 'Detail Turnamen',
+                eventDetail: 'Detail Penyelengaraan',
+                tournamentCategory: 'Kategori Turnamen',
                 tournamentForm: 'Formulir Turnamen',
                 successCreateTournament: 'Turnamen berhasil dibuat!',
+                failedCreateTournament: 'Turnamen gagal dibuat!',
                 successUpdateTournament: 'Turnamen berhasil diubah!',
+
 
 
                 // Login page
