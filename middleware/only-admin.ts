@@ -6,6 +6,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         return
     }
 
+
     const { sessionPassword } = useRuntimeConfig()
     const event = useRequestEvent()
 
@@ -13,12 +14,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         return navigateTo('/503')
     }
 
+
     const session = await useSession(event, {
         password: sessionPassword,
         name: 'my-detail'
     })
-
-    if (session.data.user.role !== 'admin') {
+    if (session.data.user.model.role !== 'admin') {
         return navigateTo('/401')
     }
 })

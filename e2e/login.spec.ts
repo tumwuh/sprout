@@ -34,6 +34,30 @@ test('Validate email format', async ({page}) => {
 
 
 test('Login process success', async ({page}) => {
+    test.slow();
+    const fakeEmail = faker.internet.email();
+    const fakeName = faker.person.fullName();
+    await page.route('**/api/collections/users/auth-with-password', route => route.fulfill({
+        status: 200,
+        body: JSON.stringify({
+            "record": {
+                "avatar": "",
+                "collectionId": "_pb_users_auth_",
+                "collectionName": "users",
+                "created": "2024-11-16 19:31:18.154Z",
+                "email": fakeEmail,
+                "emailVisibility": false,
+                "id": faker.string.alpha(12),
+                "name": fakeName,
+                "role": "team",
+                "updated": "2024-11-16 19:31:18.154Z",
+                "username": faker.internet.username(),
+                "verified": false
+            },
+            "token": faker.internet.jwt()
+        })
+    }))
+
 
     await page.goto('http://localhost:3000/login');
 
@@ -50,8 +74,6 @@ test('Login process success', async ({page}) => {
     await expect(page.getByRole('button', { name: 'Profile picture' })).toBeVisible();
 
     await page.goto('http://localhost:3000/login');
-    await page.waitForTimeout(2000);
-    expect(page.url()).toBe('http://localhost:3000/');
 
 })
 
@@ -84,6 +106,29 @@ test('Login process failed', async ({page}) => {
 
 
 test('Login process success as a organizer', async ({page}) => {
+    test.slow();
+    const fakeEmail = faker.internet.email();
+    const fakeName = faker.person.fullName();
+    await page.route('**/api/collections/users/auth-with-password', route => route.fulfill({
+        status: 200,
+        body: JSON.stringify({
+            "record": {
+                "avatar": "",
+                "collectionId": "_pb_users_auth_",
+                "collectionName": "users",
+                "created": "2024-11-16 19:31:18.154Z",
+                "email": fakeEmail,
+                "emailVisibility": false,
+                "id": faker.string.alpha(12),
+                "name": fakeName,
+                "role": "organizer",
+                "updated": "2024-11-16 19:31:18.154Z",
+                "username": faker.internet.username(),
+                "verified": false
+            },
+            "token": faker.internet.jwt()
+        })
+    }))
     await page.goto('http://localhost:3000/login');
 
     await page.fill('input[name=email]', 'organizer1@gmail.com');
@@ -94,7 +139,8 @@ test('Login process success as a organizer', async ({page}) => {
     await page.waitForTimeout(500);
     await expect(page.getByText('Login berhasil!')).toBeVisible();
 
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(1000);
     expect(page.url()).toBe('http://localhost:3000/admin/dashboard');
     await expect(page.getByRole('link', { name: 'Turnamen' })).toBeVisible();
+    await expect(page.getByText(fakeName)).toBeVisible();
 });

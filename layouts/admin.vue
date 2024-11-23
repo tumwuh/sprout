@@ -1,6 +1,3 @@
-<script setup lang="ts">
-</script>
-
 <template>
   <div class="flex py-8 px-6 p gap-8 dark:bg-[#2a313a] bg-gray-100 h-screen">
    <admin-sidebar></admin-sidebar>
@@ -12,9 +9,4 @@
       </div>
     </div>
   </div>
-
 </template>
-
-<style scoped>
-
-</style>
