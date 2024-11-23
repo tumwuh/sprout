@@ -2,7 +2,7 @@
 import {useI18n} from "vue-i18n";
 
 const {t} = useI18n()
-const {$pb} = useNuxtApp()
+const {$pb, $dayjs} = useNuxtApp()
 const {user} = useUserStore()
 const currentPage = ref(1)
 
@@ -23,6 +23,13 @@ definePageMeta({
     mode: 'out-in'
   },
 })
+
+const activateTournament = async (id: string) => {
+  await $pb.collection('tournaments').update(id, {
+    status: 'publish'
+  })
+  refresh()
+}
 
 
 </script>
@@ -54,14 +61,32 @@ definePageMeta({
               <th></th>
               <th>{{ t('name') }}</th>
               <th>Status</th>
+              <th>Tanggal Acara</th>
+              <th>Tanggal Pendaftaran</th>
+              <th>Kontak</th>
               <th></th>
             </tr>
           </template>
           <template v-slot="slotProps">
             <td>{{ slotProps.index + 1 }}</td>
-            <td></td>
-            <td></td>
+            <td><div class="flex items-center">
+              <nuxt-img provider="pocketbase"
+                        :src="`${slotProps.item.collectionId}/${slotProps.item.id}/${slotProps.item.logo}`"
+                        width="50" height="50" class="rounded-md mr-2"/>
+              <span>{{ slotProps.item.name }}</span>
+            </div></td>
+            <td> {{ slotProps.item.status }} </td>
+            <td> {{ $dayjs(slotProps.item.startDate).format('MMMM DD, YY') }} - {{ $dayjs(slotProps.item.endDate).format('MMMM DD, YY') }} </td>
+            <td> {{ $dayjs(slotProps.item.registrationStartDate).format('MMMM DD, YY') }} - {{ $dayjs(slotProps.item.registrationEndDate).format('MMMM DD, YY') }} </td>
+            <td>{{ slotProps.item.contactPerson }}</td>
             <td>
+              <div class="flex justify-end gap-2">
+                <div v-if="slotProps.item.status === 'draft'" class="tooltip tooltip-left" :data-tip="t('activatedData')">
+                  <button @click="activateTournament(slotProps.item.id)" class="btn btn-xs btn-success">
+                    <Icon name="mdi-light:check-circle" size="1.5em"/>
+                  </button>
+                </div>
+              </div>
               <div class="flex justify-end gap-2">
                 <div class="tooltip tooltip-left" :data-tip="t('changeData')">
                   <nuxt-link :to="`sport-type/${slotProps.item.id}/edit`" class="btn btn-xs btn-warning">

@@ -12,6 +12,7 @@ export default defineNuxtPlugin(({ vueApp }) => {
                 or: 'Atau',
                 changeData: 'Ubah Data',
                 addData: 'Tambah Data',
+                activatedData: 'Publikasi Data',
                 save: 'Simpan',
                 noData: 'Tidak ada data',
                 logo: 'Logo',

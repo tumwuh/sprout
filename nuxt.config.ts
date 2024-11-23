@@ -72,4 +72,15 @@ export default defineNuxtConfig({
         }
     },
     modules: ['@pinia/nuxt', '@nuxt/test-utils/module', '@vueform/nuxt', '@nuxt/image', '@nuxt/icon'],
+    image: {
+        providers: {
+            pocketbase: {
+                name: 'pocketbase',
+                provider: '~/providers/pocketbase.ts',
+                options: {
+                    baseURL: process.env.BASE_API_URL + '/api/files',
+                }
+            },
+        }
+    }
 })
