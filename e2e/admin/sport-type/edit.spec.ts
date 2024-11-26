@@ -102,8 +102,8 @@ test.beforeEach(async ({page}) => {
     await page.fill('input[name=password]', 'tesspass');
     await page.getByRole('button', {name: 'Masuk'}).click();
     await page.waitForTimeout(2000);
-    await expect(page.getByRole('link', {name: 'Jenis Olahraga'})).toBeVisible();
-    await page.getByRole('link', {name: 'Jenis Olahraga'}).click();
+    await expect(page.getByRole('link', {name: 'Cabang Olahraga'})).toBeVisible();
+    await page.getByRole('link', {name: 'Cabang Olahraga'}).click();
     await page.waitForTimeout(1000);
     await page.getByRole('row', {name: '1 test Aktif Nonaktifkan'}).getByRole('link').click();
     await page.waitForTimeout(1000);
@@ -211,7 +211,7 @@ test('Sending right param according user input', async ({page}) => {
     await page.waitForTimeout(500);
     await page.getByText('Simpan').click();
     await page.waitForTimeout(1000);
-    await expect(page.getByText('Jenis olahraga berhasil diubah!')).toBeVisible();
+    await expect(page.getByText('Cabang olahraga berhasil diubah!')).toBeVisible();
     expect(scoringTypeCall.length).toBe(3)
     expect(scoringTypeCall[0].method).toBe('DELETE')
     expect(scoringTypeCall[0].params).toBe(fakeScoringTypeId2)

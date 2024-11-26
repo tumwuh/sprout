@@ -19,20 +19,22 @@ const defaultValue = {
   contactPerson: '',
   contactNumber: '',
   isWaAvailable: false,
-  categories: [
-    {
-      name: '',
-      description: '',
-      registrationFee: 0,
-      isIndividual: true,
-      minTeamMember: 0,
-      maxTeamMember: 0,
-      isAgeRestriction: false,
-      minAge: 0,
-      maxAge: 0,
-      id: null
-    }
-  ],
+  expand: {
+    categories: [
+      {
+        name: '',
+        description: '',
+        registrationFee: 0,
+        isIndividual: true,
+        minTeamMember: 0,
+        maxTeamMember: 0,
+        isAgeRestriction: false,
+        minAge: 0,
+        maxAge: 0,
+        id: null
+      }
+    ],
+  },
   managedBy: ''
 }
 const {isVisible, message, showToaster, variant} = useToaster()

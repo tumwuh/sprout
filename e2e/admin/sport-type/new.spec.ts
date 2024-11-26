@@ -39,15 +39,15 @@ test.beforeEach(async ({page}) => {
     await page.fill('input[name=password]', 'tesspass');
     await page.getByRole('button', {name: 'Masuk'}).click();
     await page.waitForTimeout(2000);
-    await expect(page.getByRole('link', {name: 'Jenis Olahraga'})).toBeVisible();
-    await page.getByRole('link', {name: 'Jenis Olahraga'}).click();
+    await expect(page.getByRole('link', {name: 'Cabang Olahraga'})).toBeVisible();
+    await page.getByRole('link', {name: 'Cabang Olahraga'}).click();
     await page.waitForTimeout(1000);
     await page.getByRole('link', {name: 'Tambah Data'}).click();
     await page.waitForTimeout(1000);
 })
 
 test('All data form need to be rendered', async ({page}) => {
-    await expect(page.getByRole('heading', {name: 'Formulir Jenis Olahraga'})).toBeVisible();
+    await expect(page.getByRole('heading', {name: 'Formulir Cabang Olahraga'})).toBeVisible();
     expect(page.locator('#name')).not.toBeNull();
     expect(page.locator('#description')).not.toBeNull();
     await expect(page.getByLabel('Jenis Penilaian #1').getByPlaceholder('Nama')).toBeVisible();
@@ -163,7 +163,7 @@ test('User can submit form with valid value', async ({page}) => {
     await page.locator('#scoring-description-0').fill('test');
     await page.getByText('Simpan').click();
     await page.waitForTimeout(1000);
-    await expect(page.getByText('Jenis olahraga berhasil dibuat!')).toBeVisible();
+    await expect(page.getByText('Cabang olahraga berhasil dibuat!')).toBeVisible();
     expect(sportTypeCalls.length).toBe(1);
     expect(sportTypeUpdateCalls.length).toBe(1);
     expect(scoringTypeCall.length).toBe(1);

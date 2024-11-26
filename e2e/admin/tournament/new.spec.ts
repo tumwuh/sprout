@@ -116,7 +116,7 @@ test.beforeEach(async ({page}) => {
 })
 
 test('All form validation should work and all field is visible', async ({page}) => {
-    await expect(page.getByText('Tambah Jenis Olahraga')).toBeVisible();
+    await expect(page.getByText('Tambah Cabang Olahraga')).toBeVisible();
 
     // validate all step included
     await expect(page.getByRole('tab', {name: 'Detail Turnamen'})).toBeVisible();

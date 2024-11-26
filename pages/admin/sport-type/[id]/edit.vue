@@ -45,13 +45,13 @@ const handleSubmit = async (form: any) => {
         name: scoring.name,
         description: scoring.description.en,
         sportType: route.params.id as string
-      })
+      }, {requestKey: scoring.id})
     } else {
       return await $pb.collection('scoringTypes').create({
         name: scoring.name,
         description: scoring.description.en,
         sportType: route.params.id as string
-      })
+      }, {requestKey: scoring.name})
     }
   }))
 

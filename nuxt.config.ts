@@ -10,7 +10,7 @@ export default defineNuxtConfig({
         },
     },
     routeRules: {
-        '/admin': {redirect: '/admin/dashboard'}
+        '/admin': {redirect: '/admin/dashboard'},
     },
     app: {
         head: {

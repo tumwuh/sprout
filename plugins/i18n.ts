@@ -66,16 +66,16 @@ export default defineNuxtPlugin(({ vueApp }) => {
                 tournament: 'Turnamen',
 
                 // Sport type page
-                sportTypeTitle: 'Jenis Olahraga',
-                addSportType: 'Tambah Jenis Olahraga',
-                editSportType: 'Ubah Jenis Olahraga',
-                sportTypeForm: 'Formulir Jenis Olahraga',
+                sportTypeTitle: 'Cabang Olahraga',
+                addSportType: 'Tambah Cabang Olahraga',
+                editSportType: 'Ubah Cabang Olahraga',
+                sportTypeForm: 'Formulir Cabang Olahraga',
                 scoringTypeTitleForm: 'Form Jenis Penilaian',
                 scoringType: 'Jenis Penilaian',
-                successCreateSportType: 'Jenis olahraga berhasil dibuat!',
-                activateSportType: 'Aktifkan Jenis Olahraga',
-                deactivateSportType: 'Nonaktifkan Jenis Olahraga',
-                successUpdateSportType: 'Jenis olahraga berhasil diubah!',
+                successCreateSportType: 'Cabang olahraga berhasil dibuat!',
+                activateSportType: 'Aktifkan Cabang Olahraga',
+                deactivateSportType: 'Nonaktifkan Cabang Olahraga',
+                successUpdateSportType: 'Cabang olahraga berhasil diubah!',
 
                 // Tournament page
                 tournamentTitle: 'Turnamen',

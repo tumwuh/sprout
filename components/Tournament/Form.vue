@@ -3,7 +3,8 @@ import {useI18n} from "vue-i18n";
 
 const {user} = useUserStore()
 const {t} = useI18n()
-const {$pb} = useNuxtApp()
+const {$pb, $dayjs} = useNuxtApp()
+const {baseApiUrl} = useRuntimeConfig().public
 const props = defineProps({
   isSubmitting: {
     type: Boolean,
@@ -18,7 +19,14 @@ const {data: sportType, status} = useAsyncData('sportTypes', async () => $pb.col
 const scoringType = ref([])
 
 const defaultValue = reactive(props.default as any)
-const emit = defineEmits(['submit', 'scoringDelete']);
+const emit = defineEmits(['submit', 'categoryDelete']);
+
+
+onMounted(() => {
+  if (defaultValue.sportType) {
+    updateScoringType('', defaultValue.sportType, {value: defaultValue.sportType})
+  }
+})
 
 const updateScoringType = async (oldValue: string, newValue: string, el$: any) => {
   await $pb.collection('scoringTypes').getFullList({
@@ -35,7 +43,7 @@ const handleSubmit = (form: any) => {
 
 const handleDelete = (index: number) => {
   if (defaultValue.scoring && defaultValue.scoring[index] && "id" in defaultValue.scoring[index]) {
-    emit('scoringDelete', defaultValue.scoring[index].id);
+    emit('categoryDelete', defaultValue.scoring[index].id);
     defaultValue.scoring.splice(index, 1);
   }
 }
@@ -83,6 +91,7 @@ const handleDelete = (index: number) => {
               name="sportType"
               id="sportTypeOption"
               :label="t('sportType')"
+              :default="defaultValue.sportType"
               rules="required"
               :native="false"
               :items="sportType?.items.map((item: any) => ({label: item.name, value: item.id}))"
@@ -97,7 +106,8 @@ const handleDelete = (index: number) => {
               :drop="true"
               :upload-temp-endpoint="false"
               rules="max:1024"
-              :default="defaultValue.logo"
+              :preview-url="`${baseApiUrl}/api/files/`"
+              :default="defaultValue.logo ? `${defaultValue.collectionId}/${defaultValue.id}/${defaultValue.logo}` : null"
               accept=".jpg,.png,.jpeg,svg,.webp"
               name="logo"
               view="image"
@@ -108,7 +118,8 @@ const handleDelete = (index: number) => {
         }"></FileElement>
           <FileElement
               name="pamflet"
-              :default="defaultValue.pamflet"
+              :preview-url="`${baseApiUrl}/api/files/`"
+              :default="defaultValue.logo ? `${defaultValue.collectionId}/${defaultValue.id}/${defaultValue.pamflet}` : null"
               :drop="true"
               :upload-temp-endpoint="false"
               accept=".jpg,.png,.jpeg,pdf,.webp"
@@ -128,7 +139,7 @@ const handleDelete = (index: number) => {
               :label="t('description')"/>
           <DateElement
               name="startDate"
-              :default="defaultValue.startDate"
+              :default="$dayjs(defaultValue.startDate).format('YYYY-MM-DD')"
               display-format="MMMM DD, YYYY"
               :field-name="t('startDate')"
               :label="t('startDate')"
@@ -140,7 +151,7 @@ const handleDelete = (index: number) => {
           ></DateElement>
           <DateElement
               name="endDate"
-              :default="defaultValue.endDate"
+              :default="$dayjs(defaultValue.endDate).format('YYYY-MM-DD')"
               display-format="MMMM DD, YYYY"
               :field-name="t('endDate')"
               :label="t('endDate')"
@@ -152,7 +163,7 @@ const handleDelete = (index: number) => {
           ></DateElement>
           <DateElement
               name="registrationStartDate"
-              :default="defaultValue.registrationStartDate"
+              :default="$dayjs(defaultValue.registrationStartDate).format('YYYY-MM-DD')"
               display-format="MMMM DD, YYYY"
               :field-name="t('registrationStartDate')"
               :label="t('registrationStartDate')"
@@ -164,7 +175,7 @@ const handleDelete = (index: number) => {
           ></DateElement>
           <DateElement
               name="registrationEndDate"
-              :default="defaultValue.registrationEndDate"
+              :default="$dayjs(defaultValue.registrationEndDate).format('YYYY-MM-DD')"
               display-format="MMMM DD, YYYY"
               :field-name="t('registrationEndDate')"
               :label="t('registrationEndDate')"
@@ -177,6 +188,7 @@ const handleDelete = (index: number) => {
           <TextElement
               name="contactPerson"
               :label="t('contactPerson')"
+              :default="defaultValue.contactPerson"
               rules="required"
               :columns="{
                 default: 12,
@@ -190,7 +202,6 @@ const handleDelete = (index: number) => {
               :description="t('phoneNumberFormat')"
               :label="t('phoneNumber')"
               unmask
-              :include="['id']"
               :columns="{
               default: 12,
               sm: 6
@@ -208,10 +219,10 @@ const handleDelete = (index: number) => {
               <ObjectElement
                   :name="index"
                   :label="`${t('tournamentCategory')} #${index+1}`">
-                <HiddenElement meta name="id" :default="defaultValue.categories[index]?.id ?? null"/>
+                <HiddenElement meta name="id" :default="defaultValue.expand.categories[index]?.id ?? null"/>
                 <TextElement
                     :rules="['required', 'min:3', 'max:50']"
-                    :default="defaultValue.categories[index]?.name ?? ''"
+                    :default="defaultValue.expand.categories[index]?.name ?? ''"
                     name="name"
                     :label="t('name')"
                     :columns="{
@@ -223,6 +234,7 @@ const handleDelete = (index: number) => {
                     rules="required"
                     :label="t('scoringType')"
                     :field-name="t('scoringType')"
+                    :default="defaultValue.expand.categories[index]?.scoring ?? null"
                     :native="false"
                     :items="scoringType"
                     :columns="{
@@ -232,7 +244,7 @@ const handleDelete = (index: number) => {
                 />
                 <TextElement
                     :rules="['required']"
-                    :default="defaultValue.categories[index]?.registrationFee ?? ''"
+                    :default="defaultValue.expand.categories[index]?.registrationFee ?? ''"
                     :description="t('leaveZeroIfFree')"
                     input-type="text"
                     :mask="{
@@ -249,7 +261,7 @@ const handleDelete = (index: number) => {
                 />
 
                 <CheckboxElement
-                    :default="defaultValue.categories[index]?.isIndividual ?? true"
+                    :default="defaultValue.expand.categories[index]?.isIndividual ?? true"
                     name="isIndividual"
                     field-name="isIndividual"
                 >
@@ -258,7 +270,7 @@ const handleDelete = (index: number) => {
 
                 <TextElement
                     :rules="['required']"
-                    :default="defaultValue.categories[index]?.minTeamMember ?? 0"
+                    :default="defaultValue.expand.categories[index]?.minTeamMember ?? 0"
                     rules="required|min:3"
                     field-name="minTeamMember"
                     input-type="number"
@@ -273,7 +285,7 @@ const handleDelete = (index: number) => {
                 />
                 <TextElement
                     :rules="['required']"
-                    :default="defaultValue.categories[index]?.maxTeamMember ?? 0"
+                    :default="defaultValue.expand.categories[index]?.maxTeamMember ?? 0"
                     rules="required|gte:categories.*.minTeamMember"
                     input-type="number"
                     name="maxTeamMember"
@@ -287,7 +299,7 @@ const handleDelete = (index: number) => {
                 />
 
                 <CheckboxElement
-                    :default="defaultValue.categories[index]?.isAgeRestriction ?? false"
+                    :default="defaultValue.expand.categories[index]?.isAgeRestriction ?? false"
                     name="isAgeRestriction"
                     field-name="isAgeRestriction"
                 >
@@ -296,7 +308,7 @@ const handleDelete = (index: number) => {
 
                 <TextElement
                     :rules="['required']"
-                    :default="defaultValue.categories[index]?.minAge ?? 0"
+                    :default="defaultValue.expand.categories[index]?.minAge ?? 0"
                     rules="required|min:3"
                     field-name="minAge"
                     input-type="number"
@@ -311,7 +323,7 @@ const handleDelete = (index: number) => {
                 />
                 <TextElement
                     :rules="['required']"
-                    :default="defaultValue.categories[index]?.maxAge ?? 0"
+                    :default="defaultValue.expand.categories[index]?.maxAge ?? 0"
                     rules="required|gte:categories.*.maxAge"
                     input-type="number"
                     name="maxAge"

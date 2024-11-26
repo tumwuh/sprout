@@ -55,7 +55,7 @@ const activateTournament = async (id: string) => {
         </nuxt-link>
       </div>
       <client-only>
-        <data-table :status="status" :data="data?.items ?? []" :col-span="4">
+        <data-table :status="status" :data="data?.items ?? []" :col-span="7">
           <template #thead>
             <tr>
               <th></th>
@@ -89,7 +89,7 @@ const activateTournament = async (id: string) => {
               </div>
               <div class="flex justify-end gap-2">
                 <div class="tooltip tooltip-left" :data-tip="t('changeData')">
-                  <nuxt-link :to="`sport-type/${slotProps.item.id}/edit`" class="btn btn-xs btn-warning">
+                  <nuxt-link :to="`/admin/tournament/${slotProps.item.id}/edit`" class="btn btn-xs btn-warning">
                     <Icon name="mdi-light:pencil" size="1.5em"/>
                   </nuxt-link>
                 </div>

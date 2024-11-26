@@ -66,10 +66,10 @@ test('All data need to render', async ({page}) => {
             ]
         })
     }))
-    await expect(page.getByRole('link', { name: 'Jenis Olahraga' })).toBeVisible();
-    await page.getByRole('link', { name: 'Jenis Olahraga' }).click();
+    await expect(page.getByRole('link', { name: 'Cabang Olahraga' })).toBeVisible();
+    await page.getByRole('link', { name: 'Cabang Olahraga' }).click();
     await page.waitForTimeout(1000);
-    await expect(page.getByRole('heading', { name: 'Jenis Olahraga' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Cabang Olahraga' })).toBeVisible();
     await page.waitForTimeout(500);
     await expect(page.getByRole('cell', { name: 'test', exact: true })).toBeVisible();
     await expect(page.getByRole('cell', { name: 'test2', exact: true })).toBeVisible();
@@ -88,9 +88,9 @@ test('Show description if data empty or null', async ({page}) => {
         })
     }))
 
-    await expect(page.getByRole('link', { name: 'Jenis Olahraga' })).toBeVisible();
-    await page.getByRole('link', { name: 'Jenis Olahraga' }).click();
+    await expect(page.getByRole('link', { name: 'Cabang Olahraga' })).toBeVisible();
+    await page.getByRole('link', { name: 'Cabang Olahraga' }).click();
     await page.waitForTimeout(1000);
-    await expect(page.getByRole('heading', { name: 'Jenis Olahraga' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Cabang Olahraga' })).toBeVisible();
     await expect(page.getByText('Tidak ada data')).toBeVisible();
 })
