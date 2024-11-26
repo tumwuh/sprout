@@ -11,6 +11,7 @@ const buttonLoading = ref(false)
 const {t} = useI18n()
 
 definePageMeta({
+  middleware: 'prevent-authentication',
   pageTransition: {
     name: 'slide-right',
     mode: 'out-in'
@@ -47,14 +48,14 @@ const handleSubmit = async (FormData, form$) => {
     <toaster :is-visible="isVisible" :message="message" :variant="variant"/>
     <div class="bg-base-100 w-96 shadow-xl px-4 py-6 rounded-xl">
       <div class="flex flex-col text-center gap-2 justify-center">
-        <h2 class="text-2xl font-bold text-green-700 dark:text-gray-300">Pendaftaran Tim</h2>
+        <h2 class="text-2xl font-bold text-green-700 dark:text-gray-300">{{ t('registerFormTitle') }}</h2>
         <div class="mx-4 mt-6">
           <client-only>
             <Vueform :endpoint="false" validate-on="submit" @submit="handleSubmit" :display-errors="false">
               <hidden-element name="role" default="team"></hidden-element>
               <text-element
                   name="name"
-                  placeholder="Nama tim"
+                  :placeholder="t('teamName')"
                   input-type="text"
                   :rules="[
                     'required',
@@ -63,7 +64,7 @@ const handleSubmit = async (FormData, form$) => {
                   ]"></text-element>
               <text-element
                   name="email"
-                  placeholder="Email"
+                  :placeholder="t('email')"
                   input-type="email"
                   :rules="[
                     'required',
@@ -73,7 +74,7 @@ const handleSubmit = async (FormData, form$) => {
               <text-element
                   name="password"
                   input-type="password"
-                  placeholder="Kata sandi"
+                  :placeholder="t('password')"
                   :rules="[
                     'required',
                     'min:8',
@@ -87,13 +88,13 @@ const handleSubmit = async (FormData, form$) => {
                   :rules="[
                     'required',
                   ]"
-                  placeholder="Ulangi kata sandi"
+                  :placeholder="t('retypePassword')"
               ></text-element>
               <button-element
                   name="submit"
                   :loading="buttonLoading"
                   :submits="true"
-                  button-label="Daftar"
+                  :button-label="t('register')"
                   :full="true"
                   size="lg"
               ></button-element>
@@ -101,8 +102,8 @@ const handleSubmit = async (FormData, form$) => {
           </client-only>
         </div>
         <div class="mt-4">
-          <p>Sudah punya akun?
-            <nuxt-link to="/login" class="text-green-700 dark:text-gray-300">Masuk</nuxt-link>
+          <p>{{ t('alreadyHaveAccount') }}
+            <nuxt-link to="/login" class="text-green-700 dark:text-gray-300">{{t('loginButton')}}</nuxt-link>
           </p>
         </div>
       </div>

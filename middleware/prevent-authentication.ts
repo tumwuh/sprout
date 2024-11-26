@@ -18,7 +18,13 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         name: 'my-detail'
     })
 
-    if (session.data.user.model.role !== 'organizer') {
-        return navigateTo('/401')
-    }
+   if (session.data.user) {
+       if (session.data.user.role === 'team') {
+           return navigateTo('/')
+       }
+
+       if (session.data.user.role === 'admin' || session.data.user.role === 'organizer') {
+           return navigateTo('/admin')
+       }
+   }
 })

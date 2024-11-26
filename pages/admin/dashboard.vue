@@ -2,14 +2,18 @@
 
 definePageMeta({
   layout: "admin",
-  middleware: ["is-admin"]
+  middleware: ["is-admin"],
+  pageTransition: {
+    name: 'slide-right',
+    mode: 'out-in'
+  },
 });
 </script>
 
 <template>
-  <div>
+  <section>
     <h1>Dashboard</h1>
-  </div>
+  </section>
 </template>
 
 <style scoped>

@@ -45,7 +45,15 @@ const useAuth = () => {
         }
     }
 
-    return {user, registerUser, authWithEmailPassword, authenticationPageGuard}
+    const logOut = async () => {
+       user.clear()
+       await router.replace('/login')
+       await  $fetch('/api/my-detail', {
+            method: 'DELETE'
+       })
+    }
+
+    return {user, registerUser, authWithEmailPassword, authenticationPageGuard, logOut}
 }
 
 export default useAuth
