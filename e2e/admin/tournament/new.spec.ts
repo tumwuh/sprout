@@ -141,10 +141,10 @@ test('All form validation should work and all field is visible', async ({page}) 
 
     // cannot go to next step if all required field is not filled
     await page.getByRole('button', {name: 'Lanjut'}).click();
-    await expect(page.getByText('Tanggal Mulai wajib diisi.')).toBeVisible();
-    await expect(page.getByText('Tanggal Selesai wajib diisi.')).toBeVisible();
-    await expect(page.getByText('Tanggal Mulai Pendaftaran wajib diisi.')).toBeVisible();
-    await expect(page.getByText('Tanggal Selesai Pendaftaran wajib diisi.')).toBeVisible();
+    await expect(page.getByText('Tanggal Mulai harus berisi tanggal setelah 2024-11-23.')).toBeVisible();
+    await expect(page.getByText('Tanggal Selesai harus berisi tanggal setelah Invalid date.\n')).toBeVisible();
+    await expect(page.getByText('Tanggal Mulai Pendaftaran harus berisi tanggal sebelum Invalid date.')).toBeVisible();
+    await expect(page.getByText('Tanggal Selesai Pendaftaran harus berisi tanggal setelah Invalid date.')).toBeVisible();
     await expect(page.getByText('Orang yang Dapat Dihubungi wajib diisi.')).toBeVisible();
     await expect(page.getByText('Nomor Telepon wajib diisi.')).toBeVisible();
 
