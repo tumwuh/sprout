@@ -199,6 +199,5 @@ test('Should update tournament', async ({page}) => {
     await page.waitForTimeout(500);
     await page.getByRole('button', {name: 'Lanjut'}).click();
     await page.waitForTimeout(500);
-    
 
 })

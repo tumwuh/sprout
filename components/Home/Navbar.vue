@@ -1,14 +1,21 @@
 <script setup lang="ts">
 import {useI18n} from "vue-i18n";
 
-const {logOut} = useAuth()
 const userStore = useUserStore()
 const {t} = useI18n()
-const {data} = await useFetch('/api/my-detail')
+const {data, status} = await useFetch('/api/my-detail')
+const drawerRef = useTemplateRef('drawer-ref')
+
+const closeDrawer = () => {
+ if (drawerRef.value){
+   (drawerRef.value as any).checked = false
+ }
+}
 
 </script>
 <template>
-  <nav test-id="home-navbar" class="fixed flex justify-center w-screen">
+<client-only>
+  <nav test-id="home-navbar" class="fixed hidden md:flex justify-center w-screen">
     <div class="navbar bg-base-100 rounded-2xl my-4 max-w-[70vw] px-6">
       <div class="navbar-start">
         <tumwuh-logo size="md"></tumwuh-logo>
@@ -16,20 +23,24 @@ const {data} = await useFetch('/api/my-detail')
       </div>
       <div class="navbar-center hidden lg:flex">
         <ul class="menu menu-horizontal px-1">
-          <li class="light:btn-nav-home">
+          <li class="light:btn-nav-home mr-2">
             <nuxt-link to="/">{{t('home')}}</nuxt-link>
           </li>
-          <li class="light:btn-nav-home">
+          <li class="light:btn-nav-home mr-2">
             <nuxt-link to="/tournament">{{t('tournament')}}</nuxt-link>
           </li>
-          <li class="light:btn-nav-home">
+          <li class="light:btn-nav-home mr-2">
             <nuxt-link to="/">{{t('contactUs')}}</nuxt-link>
           </li>
         </ul>
       </div>
       <div class="navbar-end">
-        <nuxt-link v-if="!userStore.user" to="/login" class="btn btn-ghost btn-sm mr-2">{{t('loginButton')}}</nuxt-link>
-        <nuxt-link v-if="!userStore.user" to="/registration" class="btn btn-primary btn-sm">{{t('register')}}</nuxt-link>
+        <nuxt-link v-if="!userStore.user" to="/login" class="btn btn-ghost btn-sm mr-2">
+          {{t('loginButton')}}
+        </nuxt-link>
+        <nuxt-link v-if="!userStore.user" to="/registration" class="btn btn-primary btn-sm">
+          {{t('register')}}
+        </nuxt-link>
         <button test-id="notification-button" v-if="userStore.user" class="btn btn-ghost btn-circle">
           <div class="indicator">
             <svg
@@ -47,29 +58,53 @@ const {data} = await useFetch('/api/my-detail')
             <span class="badge badge-xs badge-primary indicator-item"></span>
           </div>
         </button>
-        <div test-id="profile-avatar" v-if="userStore.user" class="dropdown dropdown-end">
-          <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-            <div class="w-10 rounded-full">
-              <nuxt-img
-                  :src="userStore.user?.avatar !== '' ? userStore.user.avatar :  `https://api.dicebear.com/9.x/pixel-art/svg?seed=${userStore.user.name}`"
-                  alt="Profile picture"
-                  class="rounded-full"></nuxt-img>
-            </div>
-          </div>
-          <ul
-              tabindex="0"
-              class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-            <li>
-              <a class="justify-between">
-                Profile
-                <span class="badge">New</span>
-              </a>
-            </li>
-            <li><a>Settings</a></li>
-            <li @click="logOut"><a>Logout</a></li>
-          </ul>
-        </div>
+        <home-user-avatar></home-user-avatar>
       </div>
     </div>
   </nav>
+  <nav class="fixed flex md:hidden w-screen p-2">
+    <div class="drawer">
+      <input ref="drawer-ref" id="main-navbar" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content flex justify-between">
+        <div class="flex items-center gap-2">
+          <tumwuh-logo size="md"></tumwuh-logo>
+          <nuxt-link to="/" class="text-lg font-bold">Tumwuh</nuxt-link>
+        </div>
+        <!-- Page content here -->
+
+        <div>
+          <home-user-avatar></home-user-avatar>
+          <label for="main-navbar" class="btn btn-ghost drawer-button">
+            <Icon name="mdi-light:menu" size="2em"/>
+          </label>
+        </div>
+      </div>
+      <div class="drawer-side">
+        <label for="main-navbar" aria-label="close sidebar" class="drawer-overlay"></label>
+        <ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+          <!-- Sidebar content here -->
+          <li @click="closeDrawer">
+            <nuxt-link to="/">{{t('home')}}</nuxt-link>
+          </li>
+          <li @click="closeDrawer">
+            <nuxt-link to="/tournament">{{t('tournament')}}</nuxt-link>
+          </li>
+          <li @click="closeDrawer">
+            <nuxt-link to="/">{{t('contactUs')}}</nuxt-link>
+          </li>
+          <li v-if="!userStore.user" @click="closeDrawer">
+            <nuxt-link to="/login" class="btn btn-ghost btn-sm mr-2">
+              {{t('loginButton')}}
+            </nuxt-link>
+          </li>
+          <li v-if="!userStore.user" @click="closeDrawer">
+            <nuxt-link v-if="!userStore.user" to="/registration" class="btn btn-primary btn-sm">
+              {{t('register')}}
+            </nuxt-link>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</client-only>
 </template>

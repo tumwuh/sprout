@@ -14,6 +14,7 @@
   "dependencies": {
     "@nuxt/icon": "^1.7.5",
     "@nuxt/image": "^1.8.1",
+    "@nuxtjs/seo": "^2.0.2",
     "@pinia/nuxt": "^0.7.0",
     "@vueform/nuxt": "^1.7.0",
     "@vueform/plugin-mask": "^1.0.7",
