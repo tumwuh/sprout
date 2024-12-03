@@ -1,6 +1,14 @@
+<script setup lang="ts">
+definePageMeta({
+  pageTransition: {
+    name: 'slide-right',
+    mode: 'out-in'
+  },
+});
+</script>
+
 <template>
-  <div>This is an auto-imported component</div>
-  <div> I am a global component </div>
-  <div>/</div>
-  <a href="/test"> Test link </a>
+<section>
+  <h1>Home</h1>
+</section>
 </template>

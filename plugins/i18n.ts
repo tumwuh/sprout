@@ -7,7 +7,6 @@ export default defineNuxtPlugin(({ vueApp }) => {
         locale: 'id',
         messages: {
             id: {
-
                 // General
                 or: 'Atau',
                 changeData: 'Ubah Data',
@@ -33,16 +32,26 @@ export default defineNuxtPlugin(({ vueApp }) => {
                 isAgeRestriction: 'Batasan Usia?',
                 minAge: 'Usia Minimum',
                 maxAge: 'Usia Maksimum',
+                sortBy: 'Urutkan Berdasarkan',
+                newest: 'Terbaru',
+                eventComingSoon: 'Event Akan Datang',
+                eventFinished: 'Event Telah Berakhir',
+                search: 'Cari',
+
 
                 // Homepage Navbar
                 home: 'Halaman Utama',
                 contactUs: 'Hubungi Kami',
+
 
                 // Homepage Footer
                legal: 'Hukum',
                 privacyPolicy: 'Kebijakan Privasi',
                 termsAndConditions: 'Syarat dan Ketentuan',
                 cookiePolicy: 'Kebijakan Cookie',
+                copyRigth: 'Hak Cipta',
+                // List tournament page
+                tournamentList: 'Daftar Turnamen',
 
                 // Login and register page
                 registerSuccess: 'Pendaftaran anda berhasil!',

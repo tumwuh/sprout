@@ -71,7 +71,7 @@ export default defineNuxtConfig({
             baseApiUrl: process.env.BASE_API_URL,
         }
     },
-    modules: ['@pinia/nuxt', '@nuxt/test-utils/module', '@vueform/nuxt', '@nuxt/image', '@nuxt/icon'],
+    modules: ['@pinia/nuxt', '@nuxt/test-utils/module', '@vueform/nuxt', '@nuxt/image', '@nuxt/icon',  '@nuxtjs/seo',],
     image: {
         providers: {
             pocketbase: {
