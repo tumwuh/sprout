@@ -25,6 +25,7 @@ jobs:
           docker build \
           --build-arg BASE_API_URL=${{ vars.DEV_BASE_API_URL }} \
           --build-arg SESSION_PASSWORD=${{ secrets.SESSION_PASSWORD }} \
+          --build-arg WEB_URL=${{ vars.WEB_URL_DEV }} \
           -t ghcr.io/${{ github.repository_owner }}/sprout-app:dev .
 
       - name: Push Docker Image to GHCR
