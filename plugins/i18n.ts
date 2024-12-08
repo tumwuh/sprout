@@ -50,8 +50,27 @@ export default defineNuxtPlugin(({ vueApp }) => {
                 termsAndConditions: 'Syarat dan Ketentuan',
                 cookiePolicy: 'Kebijakan Cookie',
                 copyRigth: 'Hak Cipta',
+
                 // List tournament page
                 tournamentList: 'Daftar Turnamen',
+
+                // Tournament detail page
+                category: 'Kategori',
+                registrant: 'Pendaftar',
+                matchResult: 'Hasil Pertandingan',
+                standings: 'Klasemen',
+                gallery: 'Galeri',
+                individual: 'Perorangan',
+                team: 'Berkelompok',
+                year: 'Thn',
+                teamSingular: 'Kelompok',
+                free: 'Gratis',
+                tournamentNotFound: 'Turnamen tidak ditemukan',
+                position: 'Posisi',
+                gold: 'Emas',
+                silver: 'Perak',
+                bronze: 'Perunggu',
+
 
                 // Login and register page
                 registerSuccess: 'Pendaftaran anda berhasil!',

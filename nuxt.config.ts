@@ -2,6 +2,7 @@
 import type {TournamentResponse} from "~/types/tournament";
 
 export default defineNuxtConfig({
+    ssr: true,
     compatibilityDate: '2024-04-03',
     devtools: {enabled: true},
     nitro: {
@@ -24,14 +25,6 @@ export default defineNuxtConfig({
             meta: [
                 {name: 'viewport', content: 'width=device-width, initial-scale=1'},
                 {name: 'Content-Type', content: 'text/html; charset=utf-8'},
-                {
-                    name: 'description',
-                    content: 'Dapatkan Informasi Terkini dan Berpartisipasilah dalam Kompetisi Olahraga & Esport di Website Kami!'
-                },
-                {
-                    name: 'og:description',
-                    content: 'Dapatkan Informasi Terkini dan Berpartisipasilah dalam Kompetisi Olahraga & Esport di Website Kami!'
-                },
                 {
                     name: 'keywords',
                     content: 'Kompetisi Olahraga, Kompetisi Esport, Jadwal Kompetisi, Aturan Kompetisi, Hadiah Kompetisi, Daftar Kompetisi, Ranking Board, Tim Kompetisi, Peserta Kompetisi, Platform Kompetisi, Komunitas Kompetisi, Juara Kompetisi, Berita Kompetisi, Skill Kompetisi, Turnamen Esport'
@@ -96,7 +89,6 @@ export default defineNuxtConfig({
     site: {
         url: process.env.WEB_URL,
         name: 'Tumwuh',
-        description: 'Dapatkan Informasi Terkini dan Berpartisipasilah dalam Kompetisi Olahraga & Esport di Website Kami!',
         defaultLocale: 'id',
     },
     sitemap: {

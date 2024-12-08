@@ -62,7 +62,7 @@ const closeDrawer = () => {
       </div>
     </div>
   </nav>
-  <nav class="fixed flex md:hidden w-screen p-2">
+  <nav class="fixed flex md:hidden z-10 w-screen p-2">
     <div class="drawer">
       <input ref="drawer-ref" id="main-navbar" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content flex justify-between">
