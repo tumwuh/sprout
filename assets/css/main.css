@@ -31,3 +31,11 @@
 .content-card {
     @apply rounded-xl shadow-lg bg-gray-50 dark:bg-[#111924] my-2 px-6 py-8;
 }
+
+.tab-item {
+    @apply text-gray-500 inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-400 hover:border-gray-400 dark:hover:text-gray-300 cursor-pointer;
+}
+
+.tab-item.active {
+    @apply text-primary border-primary;
+}

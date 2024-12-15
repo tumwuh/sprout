@@ -271,7 +271,7 @@ const handleDelete = (index: number) => {
                 <TextElement
                     :rules="['required']"
                     :default="defaultValue.expand.categories[index]?.minTeamMember ?? 0"
-                    rules="required|min:3"
+                    rules="required|min:3|numeric"
                     field-name="minTeamMember"
                     input-type="number"
                     name="minTeamMember"
@@ -286,7 +286,7 @@ const handleDelete = (index: number) => {
                 <TextElement
                     :rules="['required']"
                     :default="defaultValue.expand.categories[index]?.maxTeamMember ?? 0"
-                    rules="required|gte:categories.*.minTeamMember"
+                    rules="required|gte:categories.*.minTeamMember|numeric"
                     input-type="number"
                     name="maxTeamMember"
                     :conditions="[
