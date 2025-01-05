@@ -8,7 +8,7 @@ const {toggleStatus} = useSportType()
 
 const {data, status, refresh} = await useAsyncData('sportTypes',
     async () => $pb.collection('sportTypes').getList(currentPage.value, 10, {}), {
-      watch: currentPage,
+      watch: [currentPage],
       lazy: true,
       server: false
     })

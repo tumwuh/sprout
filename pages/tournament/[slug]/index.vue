@@ -7,9 +7,15 @@ const {t} = useI18n()
 const route = useRoute()
 const {data}: { data: any } = await useAsyncData('tournamentDetail', async () => $pb.collection('tournaments').getFirstListItem(`slug = "${route.params.slug}"`, {
   expand: 'sportType'
-}))
-if (!data.value){
-  throw createError({statusCode: 404, message: t('tournamentNotFound')})
+}), {
+  server: true
+})
+if (!data.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: t('tournamentNotFound'),
+    message: t('tournamentNotFoundDescription')
+  })
 }
 const activeTab = ref(0)
 const dataTabs = ref([
@@ -36,23 +42,26 @@ const handleTabChange = (tab: number) => {
   })
 }
 
+useSeoMeta({
+  title: data.value.name,
+  ogTitle: data.value.name,
+  description: htmlToCleanText(data.value.description.slice(0, 160)),
+  ogDescription: htmlToCleanText(data.value.description.slice(0, 160)),
+  ogImage: `${baseApiUrl}/api/files/${data.value.collectionId}/${data.value.id}/${data.value.pamflet}`,
+  ogSiteName: 'Tumwuh',
+  ogUrl: `${webUrl}${route.fullPath}`,
+  twitterTitle: data.value.name,
+  twitterDescription: htmlToCleanText(data.value.description.slice(0, 160)),
+  twitterImage: `${baseApiUrl}/api/files/${data.value.collectionId}/${data.value.id}/${data.value.pamflet}`,
+  twitterCard: 'summary_large_image',
+})
+
 </script>
 
 <template>
   <section class="pt-[70px] md:pt-[120px] min-h-[80vh] mx-[10vw]">
     <Head>
       <Title>{{ data.name }}</Title>
-      <meta name="description" :content="htmlToCleanText(data.description)"/>
-      <meta name="og:title" :content="data.name"/>
-      <meta name="og:type" content="website"/>
-      <meta name="og:url" :content="`${webUrl}${route.fullPath}`"/>
-      <meta name="og:site_name" content="Tumwuh"/>
-      <meta name="og:description" :content="htmlToCleanText(data.description)"/>
-      <meta name="og:image" :content="`${baseApiUrl}/api/files/${data.collectionId}/${data.id}/${data.pamflet}`"/>
-      <meta name="twitter:title" :content="data.name"/>
-      <meta name="twitter:description" :content="htmlToCleanText(data.description)"/>
-      <meta name="twitter:image" :content="`${baseApiUrl}/api/files/${data.collectionId}/${data.id}/${data.pamflet}`"/>
-      <meta name="twitter:card" content="summary_large_image"/>
       <link rel="canonical" :href="`${webUrl}${route.fullPath}`">
     </Head>
     <div class="flex flex-col md:flex-row items-start gap-16 ">

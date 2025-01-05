@@ -10,7 +10,7 @@ const {data, status, refresh} = await useAsyncData('tournaments',
     async () => $pb.collection('tournaments').getList(currentPage.value, 10, {
       filter: `managedBy = "${user!.id}"`
     }), {
-      watch: currentPage.value,
+      watch: [currentPage],
       lazy: true,
       server: false
     })

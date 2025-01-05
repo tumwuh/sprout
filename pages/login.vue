@@ -7,6 +7,7 @@ import type {RecordAuthResponse, RecordModel} from "pocketbase";
 
 const {authWithEmailPassword, authenticationPageGuard, user} = useAuth()
 const userStore = useUserStore()
+const route = useRoute()
 const {isVisible, message, showToaster, variant} = useToaster()
 const router = useRouter()
 const buttonLoading = ref(false)
@@ -34,6 +35,11 @@ const handleSubmit = async (FormData, form$) => {
             if (['admin', 'organizer'].includes(res.record.role)) {
               router.push('/admin')
               return
+            }
+
+            if (route.query.from) {
+              router.push(route.query.from as string)
+              return;
             }
             router.push('/')
           }, 1000)

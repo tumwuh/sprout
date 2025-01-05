@@ -21,42 +21,48 @@ export default defineNuxtConfig({
             htmlAttrs: {
                 lang: "id"
             },
-            title: "Tumwuh | Sport Tournament",
             meta: [
                 {name: 'viewport', content: 'width=device-width, initial-scale=1'},
                 {name: 'Content-Type', content: 'text/html; charset=utf-8'},
+                {name: 'apple-mobile-web-app-title', content: 'Tumwuh'},
                 {
                     name: 'keywords',
                     content: 'Kompetisi Olahraga, Kompetisi Esport, Jadwal Kompetisi, Aturan Kompetisi, Hadiah Kompetisi, Daftar Kompetisi, Ranking Board, Tim Kompetisi, Peserta Kompetisi, Platform Kompetisi, Komunitas Kompetisi, Juara Kompetisi, Berita Kompetisi, Skill Kompetisi, Turnamen Esport'
                 },
-                {name: 'og:title', content: "Tumwuh | Sport Tournament"},
+                {name: 'og:title', content: "Tumwuh | Turnamen Olahraha"},
                 {name: 'og:url', content: "https://tumwuh.com"},
                 {name: 'og:site_name', content: 'Tumwuh'},
                 {name: 'og:type', content: 'business.business'},
-                {name: 'og:image', content: 'https://tumwuh.twic.pics/public/android-chrome-192x192.png'},
+                {name: 'og:image', content: '/favicon-96x96.png'},
                 {name: 'twitter:title', content: "Tumwuh | Sport Tournament"},
                 {name: 'twitter:card', content: "summary_large_image"},
                 {name: 'twitter:url', content: "https://tumwuh.com"},
                 {name: 'twitter:image', content: 'https://tumwuh.twic.pics/public/android-chrome-192x192.png'},
             ],
             link: [
-                {rel: 'favicon', type: 'image/x-icon', href: 'https://tumwuh.twic.pics/public/favicon.ico?v=2'},
+                {
+                    rel: 'icon',
+                    type: 'image/png',
+                    href: '/favicon-96x96.png',
+                    sizes: '96x96'
+                },
+                {
+                    rel: 'icon',
+                    type: 'image/svg+xml',
+                    href: '/favicon.svg'
+                },
+                {
+                    rel: 'shortcut icon',
+                    href: '/favicon.ico'
+                },
                 {
                     rel: 'apple-touch-icon',
-                    href: 'https://tumwuh.twic.pics/public/apple-touch-icon.png',
-                    sizes: "180x180"
+                    sizes: '180x180',
+                    href: '/apple-touch-icon.png'
                 },
                 {
-                    rel: 'icon',
-                    href: 'https://tumwuh.twic.pics/public/favicon-32x32.png?v=2',
-                    sizes: "32x32",
-                    type: "image/png"
-                },
-                {
-                    rel: 'icon',
-                    href: 'https://tumwuh.twic.pics/public/favicon-16x16.png?v=2',
-                    sizes: "16x16",
-                    type: "image/png"
+                    rel: 'manifest',
+                    href: '/site.webmanifest'
                 },
                 { rel: 'canonical', href: process.env.WEB_URL },
             ]
@@ -104,7 +110,7 @@ export default defineNuxtConfig({
             async () => {
                 const posts = await $fetch<TournamentResponse>(`${process.env.BASE_API_URL}/api/collections/tournaments/records`)
                 return posts.items.map(post => ({
-                    loc: `/tournament/tournament-test-2/${post.slug}`,
+                    loc: `/tournament/${post.slug}`,
                     lastmod: post.updated,
                     priority: 0.3,
                     changefreq: 'never'
@@ -125,7 +131,7 @@ export default defineNuxtConfig({
         rules: [
             {
                 userAgent: '*',
-                disallow: ['/admin/']
+                disallow: ['/admin/', '/my/']
             }
         ]
     },
