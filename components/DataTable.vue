@@ -23,8 +23,18 @@ const props = defineProps({
   totalItems: {
     type: Number,
     default: 0
+  },
+  itemPerPage: {
+    type: Number,
+    default: 10
   }
 })
+
+const emit = defineEmits(['changePage'])
+
+const changePage = (page: number) => {
+  emit('changePage', page)
+}
 
 </script>
 <template>
@@ -61,15 +71,16 @@ const props = defineProps({
         </tr>
       </tbody>
     </table>
-    <div v-if="data.length && totalItems" class="join flex justify-end mt-4">
-      <button
-        v-for="(item, index) in paginationGenerator(currentPage, 10, totalItems ?? 0)"
+  </div>
+  <div v-if="data.length && totalItems" class="join flex justify-end mt-4">
+    <button
+        v-for="(item, index) in paginationGenerator(currentPage, props.itemPerPage, totalItems ?? 0)"
         :key="index"
+        @click="changePage(item)"
         class="join-item btn btn-sm"
         :disabled="item === '...'"
-        :class="{'btn-primary': item === 1}"
-      >{{ item }}</button>
-    </div>
+        :class="{'btn-primary': item === currentPage}"
+    >{{ item }}</button>
   </div>
 </template>
 

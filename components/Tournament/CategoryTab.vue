@@ -41,7 +41,7 @@ const {data, status} = await useAsyncData('category', async () => $pb.collection
             }}
           </div>
         </div>
-        <nuxt-link :to="`/tournament/${route.params.slug}/registration`"
+        <nuxt-link :to="`/tournament/${route.params.slug}/register?category=${item.id}`"
                    class="btn btn-primary btn-sm">
           {{ t('register') }}
         </nuxt-link>

@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import {useI18n} from "vue-i18n";
 
+const router = useRouter()
 const {t} = useI18n()
 const {$pb, $dayjs} = useNuxtApp()
 const sortBy = ref<string>('created')
+
 const filterBy = ref<string>('(status = "publish")')
 const {data, status} = await useAsyncData('tournament', async () => $pb.collection('tournaments').getList(1, 50, {
   expand: 'sportType,managedBy.name',
@@ -49,6 +51,10 @@ const handleSearch = (form: any) => {
 
   filterBy.value = tempFilterBy
 }
+
+const goToDetail = (slug: string) => {
+  router.push(`/tournament/${slug}`)
+}
 </script>
 
 <template>
@@ -92,10 +98,10 @@ const handleSearch = (form: any) => {
             </select>
           </div>
         </div>
-        <section  v-if="status === 'success'">
-          <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-4 px-4 my-8">
-            <div v-for="item in data.items" class="card static bg-base-100 shadow-xl">
-              <figure class="h-[200px] flex justify-center items-center bg-white relative">
+        <section v-if="status === 'success'">
+          <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 px-4 my-8">
+            <div v-for="item in data.items" class="card static bg-base-100 shadow-xl cursor-pointer">
+              <figure class="h-[200px] flex justify-center items-center bg-white relative"  @click="goToDetail(item.slug)">
                 <nuxt-img
                     provider="pocketbase"
                     v-if="item.logo && item.logo.length > 0"
@@ -108,7 +114,7 @@ const handleSearch = (form: any) => {
                 <div></div>
               </figure>
               <div class="card-body">
-                <h2 class="card-title"><nuxt-link :to="`/tournament/${item.slug}`">{{ item.name }}</nuxt-link> </h2>
+                <h2 class="card-title w-full"><nuxt-link :to="`/tournament/${item.slug}`">{{ item.name }}</nuxt-link> </h2>
                 <div class="flex flex-wrap gap-2">
                   <div class="badge badge-primary text-white dark:text-black">
                     <Icon name="mdi-light:sitemap" size="1.5em" class="mr-0.5"/>
@@ -119,20 +125,19 @@ const handleSearch = (form: any) => {
                     {{ item.region }}
                   </div>
                 </div>
-                <div class="card-actions justify-between items-end ">
+                <div class="card-actions justify-between items-center">
                   <div class="text-sm">{{ $dayjs(item.startDate).format('DD MMM YYYY') }} -
                     {{ $dayjs(item.endDate).format('DD MMM YYYY') }}
                   </div>
-                  <button class="btn btn-sm btn-primary">Daftar</button>
+                  <nuxt-link :to="`/tournament/${item.slug}/register`" class="btn btn-sm btn-primary">Daftar</nuxt-link>
                 </div>
               </div>
             </div>
           </div>
         </section>
-        <div v-else class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-3 gap-4 px-4 my-8">
+        <div v-else class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 px-4 my-8">
           <div v-for="item in [1,2,3,4,5,6]" :key="item" class="card bg-base-100 shadow-xl">
             <figure class="h-[200px] skeleton flex justify-center items-center ">
-
             </figure>
             <div class="card-body">
               <h2 class="card-title skeleton w-1/2 inline-block h-[24px]"></h2>

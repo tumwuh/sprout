@@ -5,13 +5,12 @@
 </script>
 
 <template>
-  <div class="bg-gray-500 flex justify-center items-center text-sm mr-2" :class="{
+  <div class="flex justify-center items-center text-sm mr-2 bg-[url('/tumwuh-logo.png')] dark:bg-[url('/tumwuh-logo-dark.png')] bg-contain bg-no-repeat bg-center" :class="{
     'w-[24px] h-[24px]': props.size === 'sm',
     'w-[48px] h-[48px]': props.size === 'md',
-    'w-[96px] h-[96px]': props.size === 'lg',
+    'w-[120px] h-[48px]': props.size === 'lg',
     'w-[192px] h-[192px]': props.size === 'xl',
   }">
-    Logo
   </div>
 </template>
 

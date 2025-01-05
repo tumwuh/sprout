@@ -1,13 +1,13 @@
 import { useSession } from 'h3'
 import { defineNuxtRouteMiddleware, navigateTo, useRequestEvent } from 'nuxt/app'
-import {useI18n} from "vue-i18n";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
     if (!process.server) {
         return
     }
+    const nuxtApp = useNuxtApp();
+    const userStore = useUserStore(nuxtApp.$pinia);
 
-    const {t} = useI18n()
 
     const { sessionPassword } = useRuntimeConfig()
     const event = useRequestEvent()
@@ -21,7 +21,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         name: 'my-detail'
     })
 
-    if (session.data.user.model.role !== 'organizer') {
-        throw createError({statusCode: 401, message: t('onlyAdminMessage'), statusMessage: t('generalUnauthorized')})
+    if (!session.data.user) {
+        return navigateTo('/login')
     }
+
+
+    userStore.$patch({
+        user: session.data.user.model,
+    });
 })

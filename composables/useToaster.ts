@@ -12,7 +12,7 @@ export function useToaster() {
         variant.value = newVariant
         setTimeout(() => {
             isVisible.value = false
-        }, 3000)
+        }, duration)
     }
 
     return {
