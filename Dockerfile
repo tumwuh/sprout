@@ -9,8 +9,6 @@ WORKDIR /app
 ARG BASE_API_URL
 ARG SESSION_PASSWORD
 
-# Print build arguments for debugging
-RUN echo "BASE_API_URL=${BASE_API_URL}" && echo "SESSION_PASSWORD=${SESSION_PASSWORD}"
 
 
 # Copy the package.json and bun.lockb files
@@ -46,8 +44,6 @@ ENV NODE_ENV=production
 ENV BASE_API_URL=$BASE_API_URL
 ENV SESSION_PASSWORD=$SESSION_PASSWORD
 
-# Print environment variables for debugging
-RUN echo "BASE_API_URL=${BASE_API_URL}" && echo "SESSION_PASSWORD=${SESSION_PASSWORD}"
 
 # Use a non-root user
 USER bun

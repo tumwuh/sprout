@@ -36,7 +36,7 @@ jobs:
         run: docker save ghcr.io/${{ github.repository_owner }}/sprout-app:dev -o sprout-app-dev.tar
 
       - name: Upload Docker image artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: sprout-app-dev
           path: sprout-app-dev.tar
