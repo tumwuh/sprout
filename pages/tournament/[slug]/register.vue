@@ -26,7 +26,9 @@ definePageMeta({
 });
 
 
-const {data}: { data: any } = await useAsyncData('tournamentDetail', async () => $pb.collection('tournaments').getFirstListItem(`slug = "${route.params.slug}"`, {
+const {data}: {
+  data: any
+} = await useAsyncData('tournamentDetail', async () => $pb.collection('tournaments').getFirstListItem(`slug = "${route.params.slug}"`, {
   expand: 'sportType,categories'
 }), {
   server: true,
@@ -43,13 +45,19 @@ if (!user) {
   })
 }
 
-const {data: athlete, refresh: athleteRefresh} = await useAsyncData('athlete', async () => $pb.collection('athletes' as any).getList(1, 999, {
+const {
+  data: athlete,
+  refresh: athleteRefresh
+} = await useAsyncData('athlete', async () => $pb.collection('athletes' as any).getList(1, 999, {
   filter: `team = "${user!.id}"`,
 }), {
   server: true,
 })
 
-const {data: registration, refresh: registrationRefresh} = await useAsyncData('registration', async () => $pb.collection('tournamentRegistration' as any).getFirstListItem(`team = "${user!.id}" && tournament = "${data.value.id}"`), {
+const {
+  data: registration,
+  refresh: registrationRefresh
+} = await useAsyncData('registration', async () => $pb.collection('tournamentRegistration' as any).getFirstListItem(`team = "${user!.id}" && tournament = "${data.value.id}"`), {
   server: false,
 })
 
@@ -118,7 +126,10 @@ const handleSubmit = async (form$: any) => {
 
   if (!selectedCategory.isIndividual) {
     if (form$.data.participantList.length < selectedCategory.minTeamMember || form$.data.participantList.length > selectedCategory.maxTeamMember) {
-      showErrorBagForParticipantList(t('teamCategoryError', {min: selectedCategory.minTeamMember, max: selectedCategory.maxTeamMember}))
+      showErrorBagForParticipantList(t('teamCategoryError', {
+        min: selectedCategory.minTeamMember,
+        max: selectedCategory.maxTeamMember
+      }))
       return
     }
   }
@@ -181,6 +192,7 @@ const handleSubmit = async (form$: any) => {
         listAthlete.push(item.id)
       })
     }
+
     if (listAthlete.length < new Set(listAthlete).size) {
       showErrorBagForParticipantList(t('duplicateAthleteInTeam'))
       await athleteRefresh()
@@ -202,10 +214,15 @@ const handleSubmit = async (form$: any) => {
 
     await $pb.collection('notifications' as any).create({
       title: t('newRegistrantForTournament'),
-      link: `/admin/tournament/${data.value.slug}/participants`,
+      targetLink: `/admin/tournament/${data.value.slug}/participants`,
       targetUser: data.value.managedBy,
       isSeen: false,
       isDeleted: false,
+      description: t('newRegistrantForTournamentDescription', {
+        team: user!.name,
+        tournament: data.value.name,
+        category: selectedCategory.name
+      }),
     })
 
 
@@ -294,7 +311,10 @@ const handleSubmit = async (form$: any) => {
         />
         <StaticElement name="restrictionNotice">
                 <span v-if="categoriesWithKey[selectedCategory].isAgeRestriction" class="text-sm text-gray-500">*{{
-                    t('ageRestrictiveNotification', {min: categoriesWithKey[selectedCategory].minAge, max: categoriesWithKey[selectedCategory].maxAge})
+                    t('ageRestrictiveNotification', {
+                      min: categoriesWithKey[selectedCategory].minAge,
+                      max: categoriesWithKey[selectedCategory].maxAge
+                    })
                   }}</span>
         </StaticElement>
         <StaticElement name="athleteTitle">
@@ -302,7 +322,10 @@ const handleSubmit = async (form$: any) => {
           <p v-if="categoriesWithKey[selectedCategory].isIndividual">{{ t('individualCategoryInfo') }}</p>
           <p v-else>
             {{
-              t('teamCategoryInfo', {min: categoriesWithKey[selectedCategory].minTeamMember, max: categoriesWithKey[selectedCategory].maxTeamMember})
+              t('teamCategoryInfo', {
+                min: categoriesWithKey[selectedCategory].minTeamMember,
+                max: categoriesWithKey[selectedCategory].maxTeamMember
+              })
             }}</p>
         </StaticElement>
         <ListElement rules="required|min:1" name="participantList" :field-name="t('participantList')">

@@ -69,8 +69,9 @@ const closeDrawer = () => {
         <input ref="drawer-ref" id="main-navbar" type="checkbox" class="drawer-toggle"/>
         <div class="drawer-content flex justify-between bg-white dark:bg-base-200">
           <div class="flex items-center gap-2">
-            <tumwuh-logo size="md"></tumwuh-logo>
-            <nuxt-link to="/" class="text-lg font-bold">Tumwuh</nuxt-link>
+            <nuxt-link to="/" class="text-lg font-bold">
+              <tumwuh-logo size="md"></tumwuh-logo>
+            </nuxt-link>
           </div>
           <!-- Page content here -->
 

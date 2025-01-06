@@ -4,6 +4,7 @@ import {useI18n} from "vue-i18n";
 const userStore = useUserStore()
 const route = useRoute()
 const router = useRouter()
+const {logOut} = useAuth()
 
 
 type SettingListItem = {
@@ -98,7 +99,7 @@ const goTo = (path: string) => {
 
         </div>
       </div>
-      <div class="tooltip flex justify-center" :data-tip="t('logout')">
+      <div class="tooltip flex justify-center" @click="logOut" :data-tip="t('logout')">
         <Icon name="material-symbols:logout-rounded" size="2em" class="cursor-pointer mr-2"/>
       </div>
     </div>
