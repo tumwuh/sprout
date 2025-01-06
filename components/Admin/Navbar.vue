@@ -1,31 +1,74 @@
 <script setup lang="ts">
+import {useInterval} from '@vueuse/core'
+import {useI18n} from "vue-i18n";
 
 const {logOut} = useAuth()
+const {$pb, $dayjs} = useNuxtApp()
 const userStore = useUserStore()
+const router = useRouter()
 const {data} = await useFetch('/api/my-detail')
+const counter = useInterval(1000 * 60 * 15)
+const {t} = useI18n()
 
+const {
+  data: notification,
+  status: notificationStatus,
+  refresh: notificationRefresh
+} = await useAsyncData('notification', () => $pb.collection('notifications').getList(1, 10, {
+  filter: `targetUser = '${userStore.user?.id}' && isDeleted =  false`,
+  sort: '-created'
+}), {
+  server: false,
+  lazy: true,
+})
+
+watch(counter, () => {
+  notificationRefresh()
+})
+
+const goToCta = (cta: string | null) => {
+  if (!cta || !cta.length) return
+  router.push(cta)
+}
+
+const setNotificationSeen = async (id: string, isSeen: boolean) => {
+  if (!isSeen) {
+    await $pb.collection('notifications').update(id, {isSeen: true})
+    await notificationRefresh()
+  }
+}
 </script>
 
 <template>
   <nav class="flex flex-grow justify-end items-center">
     <client-only>
-      <button test-id="notification-button" class="btn btn-ghost btn-circle">
-        <div class="indicator">
-          <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor">
-            <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-          </svg>
-          <span class="badge badge-xs badge-primary indicator-item"></span>
+      <div test-id="notification-button" class="dropdown">
+        <div tabindex="1" class="btn btn-ghost btn-circle">
+          <div class="indicator">
+            <Icon name="iconoir:bell" size="1.5em"/>
+            <span v-if="notification?.items.filter(e => !e.isSeen).length"
+                  class="badge badge-xs badge-primary indicator-item"></span>
+          </div>
         </div>
-      </button>
+        <ul
+            tabindex="0"
+            class="menu menu-sm dropdown-content bg-base-100 rounded-md z-[1] mt-3 w-[300px] p-2 shadow right-0">
+          <li v-for="item in notification?.items" :key="item.id"
+              @mouseenter="setNotificationSeen(item.id, item.isSeen)">
+            <div class="flex flex-col" @click="goToCta(item.targetLink)">
+              <div class="w-full flex justify-between">
+                <span :class="{'font-bold': !item.isSeen}">{{ item.title }}</span><span
+                  class="text-xs">{{ $dayjs(item.created).format('DD MMM, YY') }}</span></div>
+              <div class="text-left w-full">{{ item.description }}</div>
+            </div>
+          </li>
+          <li v-if="!notification?.items.length">
+            <div class="flex flex-col">
+              <div>{{ t('noNotification') }}</div>
+            </div>
+          </li>
+        </ul>
+      </div>
       <div class="divider divider-horizontal"></div>
       <div class=" overflow-ellipsis mr-2"><span class="font-semibold">{{ data?.model?.name }}</span></div>
       <div test-id="profile-avatar" v-if="userStore.user" class="dropdown dropdown-end">

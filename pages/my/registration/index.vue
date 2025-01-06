@@ -17,6 +17,7 @@ const {user} = useUserStore()
 const {t} = useI18n()
 const {currentPage, itemPerPage, updatePage} = useDataTableFunction()
 const router = useRouter()
+const loading = ref(false)
 
 useSeoMeta({
   title: 'Daftar pendaftaran saya',
@@ -32,7 +33,8 @@ const {data, status} = await useAsyncData('tournamentRegistration',
       server: false
     })
 
-const downloadInvoice =  async (id: string) => {
+const downloadInvoice = async (id: string) => {
+  loading.value = true
   const data = await $pb.collection('tournamentRegistration').getOne(id, {
     expand: 'tournament'
   })
@@ -45,8 +47,9 @@ const downloadInvoice =  async (id: string) => {
   const a = document.createElement('a')
   a.href = url
   a.target = '_blank'
-  // a.download = `invoice-${data.id}.pdf`
+  a.download = `invoice.pdf`
   a.click()
+  loading.value = false
 }
 
 
@@ -95,12 +98,14 @@ const downloadInvoice =  async (id: string) => {
         <td>
           <div class="flex gap-2">
             <div class="tooltip tooltip-left" :data-tip="t('detailRegistration')">
-              <button @click="router.push(`registration/${slotProps.item.id}/list-participation`)" class="btn btn-xs btn-ghost">
+              <button @click="router.push(`registration/${slotProps.item.id}/list-participation`)"
+                      class="btn btn-xs btn-ghost">
                 <Icon name="tabler:eye" size="1.5em"/>
               </button>
             </div>
             <div class="tooltip tooltip-left" :data-tip="t('printInvoice')">
-              <button @click.once="downloadInvoice(slotProps.item.id)" class="btn btn-xs  btn-ghost ">
+              <button @click.once="downloadInvoice(slotProps.item.id)" class="btn btn-xs  btn-ghost"
+                      :class="{'cursor-wait': loading}">
                 <Icon name="tabler:file" size="1.5em"/>
               </button>
             </div>

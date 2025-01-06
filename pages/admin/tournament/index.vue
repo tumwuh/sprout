@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import {useI18n} from "vue-i18n";
+import useDataTableFunction from "~/composables/useDataTableFunction";
 
 const {t} = useI18n()
 const {$pb, $dayjs} = useNuxtApp()
 const {user} = useUserStore()
-const currentPage = ref(1)
+const {currentPage, itemPerPage, updatePage} = useDataTableFunction()
 
 const {data, status, refresh} = await useAsyncData('tournaments',
-    async () => $pb.collection('tournaments').getList(currentPage.value, 10, {
+    async () => $pb.collection('tournaments').getList(currentPage.value, itemPerPage.value, {
       filter: `managedBy = "${user!.id}"`
     }), {
       watch: [currentPage],
@@ -69,19 +70,26 @@ const activateTournament = async (id: string) => {
           </template>
           <template v-slot="slotProps">
             <td>{{ slotProps.index + 1 }}</td>
-            <td><div class="flex items-center">
-              <nuxt-img provider="pocketbase"
-                        :src="`${slotProps.item.collectionId}/${slotProps.item.id}/${slotProps.item.logo}`"
-                        width="50" height="50" class="rounded-md mr-2"/>
-              <span>{{ slotProps.item.name }}</span>
-            </div></td>
-            <td> {{ slotProps.item.status }} </td>
-            <td> {{ $dayjs(slotProps.item.startDate).format('MMMM DD, YY') }} - {{ $dayjs(slotProps.item.endDate).format('MMMM DD, YY') }} </td>
-            <td> {{ $dayjs(slotProps.item.registrationStartDate).format('MMMM DD, YY') }} - {{ $dayjs(slotProps.item.registrationEndDate).format('MMMM DD, YY') }} </td>
+            <td>
+              <div class="flex items-center">
+                <nuxt-img provider="pocketbase"
+                          :src="`${slotProps.item.collectionId}/${slotProps.item.id}/${slotProps.item.logo}`"
+                          width="50" height="50" class="rounded-md mr-2"/>
+                <span>{{ slotProps.item.name }}</span>
+              </div>
+            </td>
+            <td> {{ slotProps.item.status }}</td>
+            <td> {{ $dayjs(slotProps.item.startDate).format('DD MMM, YY') }} -
+              {{ $dayjs(slotProps.item.endDate).format('DD MMM, YY') }}
+            </td>
+            <td> {{ $dayjs(slotProps.item.registrationStartDate).format('DD MMM, YY') }} -
+              {{ $dayjs(slotProps.item.registrationEndDate).format('DD MMM, YY') }}
+            </td>
             <td>{{ slotProps.item.contactPerson }}</td>
             <td>
               <div class="flex justify-end gap-2">
-                <div v-if="slotProps.item.status === 'draft'" class="tooltip tooltip-left" :data-tip="t('activatedData')">
+                <div v-if="slotProps.item.status === 'draft'" class="tooltip tooltip-left"
+                     :data-tip="t('activatedData')">
                   <button @click="activateTournament(slotProps.item.id)" class="btn btn-xs btn-success">
                     <Icon name="mdi-light:check-circle" size="1.5em"/>
                   </button>
@@ -89,8 +97,14 @@ const activateTournament = async (id: string) => {
               </div>
               <div class="flex justify-end gap-2">
                 <div class="tooltip tooltip-left" :data-tip="t('changeData')">
-                  <nuxt-link :to="`/admin/tournament/${slotProps.item.id}/edit`" class="btn btn-xs btn-warning">
+                  <nuxt-link :to="`/admin/tournament/${slotProps.item.id}/edit`" class="btn btn-xs btn-ghost">
                     <Icon name="mdi-light:pencil" size="1.5em"/>
+                  </nuxt-link>
+                </div>
+
+                <div class="tooltip tooltip-left" :data-tip="t('seeDetail')">
+                  <nuxt-link :to="`/admin/tournament/${slotProps.item.id}`" class="btn btn-xs btn-ghost">
+                    <Icon name="mdi-light:eye" size="1.5em"/>
                   </nuxt-link>
                 </div>
               </div>

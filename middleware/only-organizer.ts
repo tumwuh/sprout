@@ -1,13 +1,10 @@
 import { useSession } from 'h3'
 import { defineNuxtRouteMiddleware, navigateTo, useRequestEvent } from 'nuxt/app'
-import {useI18n} from "vue-i18n";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
     if (!process.server) {
         return
     }
-
-    const {t} = useI18n()
 
     const { sessionPassword } = useRuntimeConfig()
     const event = useRequestEvent()
@@ -22,6 +19,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     })
 
     if (session.data.user.model.role !== 'organizer') {
-        throw createError({statusCode: 401, message: t('onlyAdminMessage'), statusMessage: t('generalUnauthorized')})
+        throw createError({statusCode: 401, message: 'Hanya admin yang dizinkan mengakses menu ini, anda tidak berhak mengasesnya !', statusMessage: 'Anda tidak diizinkan'})
     }
 })

@@ -49,6 +49,7 @@ export default defineNuxtPlugin(({vueApp}) => {
                 myTeam: 'Tim Saya',
                 isValid: 'Tervalidasi',
                 athlete: 'Atlet',
+                seeDetail: 'Lihat Detail',
 
                 // setting page
                 general: 'Pengaturan Umum',
@@ -60,14 +61,18 @@ export default defineNuxtPlugin(({vueApp}) => {
                 detailRegistration: 'Detail Pendaftaran',
                 printInvoice: 'Cetak Invoice',
                 uploadProof: 'Unggah Bukti Pembayaran',
+                paymentProof: 'Bukti Pembayaran',
+                seePaymentProof: 'Lihat Bukti Pembayaran',
                 listParticipation: 'Daftar Peserta',
-                registrationAt:  'Tanggal Daftar',
+                registrationAt: 'Tanggal Daftar',
                 deleteRegistration: 'Hapus Pendaftaran',
                 deleteRegistrationConfirmation: 'Apakah kamu yakin ingin menghapus pendaftaran ini? Tindakan ini bersifat permanen dan tidak bisa dibatalkan',
-
+                validateRegistrationConfirmation: 'Apakah kamu yakin ingin memvalidasi pendaftaran ini?',
 
                 // Notification message
                 newRegistrantForTournament: 'Pendaftar baru untuk turnamen',
+                newRegistrantForTournamentDescription: '{team} baru saja mendaftar untuk kategori {category} pada turnamen {tournament}',
+                noNotification: 'Tidak ada notifikasi',
 
                 // Homepage Navbar
                 home: 'Halaman Utama',
@@ -164,6 +169,7 @@ export default defineNuxtPlugin(({vueApp}) => {
                 successCreateTournament: 'Turnamen berhasil dibuat!',
                 failedCreateTournament: 'Turnamen gagal dibuat!',
                 successUpdateTournament: 'Turnamen berhasil diubah!',
+                validateRegistration: 'Validasi Pendaftaran',
 
 
                 // Login page
