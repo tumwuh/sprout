@@ -56,7 +56,13 @@ const activateTournament = async (id: string) => {
         </nuxt-link>
       </div>
       <client-only>
-        <data-table :status="status" :data="data?.items ?? []" :col-span="7">
+        <data-table :status="status"
+                    :data="data?.items ?? []"
+                    :col-span="7"
+                    :current-page="currentPage"
+                    :total-items="data?.totalItems"
+                    @change-page="updatePage"
+                    :item-per-page="itemPerPage">
           <template #thead>
             <tr>
               <th></th>

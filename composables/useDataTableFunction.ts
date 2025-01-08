@@ -6,10 +6,15 @@ const useDataTableFunction = (startPage: number = 1, startItemPerPage: number = 
         currentPage.value = page
     }
 
+    const updateItemPerPage = (page: number) => {
+        itemPerPage.value = page
+    }
+
     return {
         currentPage,
         itemPerPage,
-        updatePage
+        updatePage,
+        updateItemPerPage
     }
 }
 
