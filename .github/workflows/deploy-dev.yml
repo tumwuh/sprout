@@ -40,6 +40,7 @@ jobs:
         with:
           name: sprout-app-dev
           path: sprout-app-dev.tar
+          retention-days: 1
 
   deploy-to-dev-ec2:
     needs: [ build-and-push ]
