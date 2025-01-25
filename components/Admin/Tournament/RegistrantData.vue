@@ -13,14 +13,12 @@ const {t} = useI18n()
 const {data, status, refresh} = await useAsyncData('tournamentRegistration',
     async () => $pb.collection('tournamentRegistration').getList(currentPage.value, itemPerPage.value, {
       filter: `tournament = "${route.params.id}"`,
-      expand: 'tournament,participants'
+      expand: 'tournament,participants',
+      sort: '-created'
     }), {
       watch: [currentPage],
       server: false
     })
-
-
-
 
 
 const getImageUrl = async (record: any) => {
@@ -43,6 +41,7 @@ const validateRegistration = async () => {
   closeModal()
   await refresh()
 }
+
 </script>
 
 <template>
@@ -94,7 +93,7 @@ const validateRegistration = async () => {
         <td class="text-center">{{ formatToRupiah(slotProps.item.totalFee) }}</td>
         <td>
           <div class="flex gap-2">
-            <div v-if="slotProps.item.paymentProof.length > 0" class="tooltip tooltip-left"
+            <div v-if="slotProps.item?.paymentProof?.length > 0" class="tooltip tooltip-left"
                  :data-tip="t('seePaymentProof')">
               <button @click="getImageUrl(slotProps.item)" class="btn btn-sm btn-ghost">
                 <Icon name="tabler:file" size="1.5em"/>
@@ -104,6 +103,11 @@ const validateRegistration = async () => {
               <button @click="showValidateConfirmation(slotProps.item.id)" class="btn btn-sm  btn-ghost ">
                 <Icon name="iconoir:database-script" size="1.5em"/>
               </button>
+            </div>
+            <div class="tooltip tooltip-left" :data-tip="t('detailRegistration')">
+              <nuxt-link :to="`${route.params.id}/registration/${slotProps.item.id}`" class="btn btn-sm  btn-ghost ">
+                <Icon name="lucide:eye" size="1.5em"/>
+              </nuxt-link>
             </div>
           </div>
         </td>

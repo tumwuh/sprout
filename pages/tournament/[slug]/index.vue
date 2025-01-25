@@ -65,10 +65,10 @@ useSeoMeta({
       <link rel="canonical" :href="`${webUrl}${route.fullPath}`">
     </Head>
     <div class="flex flex-col md:flex-row items-start gap-16 ">
-      <figure class="md:w-[450px] inline-block">
+      <div class="md:w-[450px] inline-block">
         <nuxt-img :src="`${baseApiUrl}/api/files/${data.collectionId}/${data.id}/${data.pamflet}`" :alt="data.name"
                   class="w-[450px] h-[450px] object-contain rounded-lg"/>
-      </figure>
+      </div>
       <div class="text-left">
         <h1 class="text-left text-2xl font-bold mb-4">{{ data.name }}</h1>
         <div class="md:max-w-[40vw] md:max-h-[450px] overflow-y-auto text-justify" v-html="data.description"></div>

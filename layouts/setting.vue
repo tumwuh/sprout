@@ -26,6 +26,7 @@ const pathName = {
 
 </script>
 <template>
+  <NuxtLoadingIndicator />
   <div class="grid grid-cols-1 md:grid-cols-6">
     <setting-navbar></setting-navbar>
     <section class="col-span-5 h-screen overflow-y-auto bg-green-300 dark:bg-[#2a313a] px-12 pt-[80px]">

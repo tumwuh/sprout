@@ -145,5 +145,5 @@ export default defineNuxtConfig({
                 }
             },
         }
-    }
+    },
 })

@@ -8,6 +8,10 @@ const props = defineProps({
   tournamentId: {
     type: String,
     required: true
+  },
+  isForOrganizer: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -20,7 +24,7 @@ const {data, status} = await useAsyncData('category', async () => $pb.collection
 <template>
   <section class="py-12">
     <div v-if="status === 'success'" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <div v-for="item in data.items" :key="item.id"
+      <div v-for="item in data?.items" :key="item.id"
            class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
         <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ item.name }}</h5>
         <div class="flex flex-wrap mb-4 gap-2">
@@ -41,9 +45,13 @@ const {data, status} = await useAsyncData('category', async () => $pb.collection
             }}
           </div>
         </div>
-        <nuxt-link :to="`/tournament/${route.params.slug}/register?category=${item.id}`"
+        <nuxt-link v-if="!props.isForOrganizer" :to="`/tournament/${route.params.slug}/register?category=${item.id}`"
                    class="btn btn-primary btn-sm">
           {{ t('register') }}
+        </nuxt-link>
+        <nuxt-link v-else :to="`/admin/tournament/${props.tournamentId}/category/${item.id}/match`"
+                   class="btn btn-primary btn-sm">
+          {{ t('match') }}
         </nuxt-link>
       </div>
     </div>
