@@ -39,3 +39,9 @@
 .tab-item.active {
     @apply text-primary border-primary;
 }
+
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

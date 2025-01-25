@@ -12,9 +12,8 @@ const {t} = useI18n()
 
 const {
   data: notification,
-  status: notificationStatus,
   refresh: notificationRefresh
-} = await useAsyncData('notification', () => $pb.collection('notifications').getList(1, 10, {
+} = await useAsyncData('notification', () => $pb.collection('notifications').getList(1, 4, {
   filter: `targetUser = '${userStore.user?.id}' && isDeleted =  false`,
   sort: '-created'
 }), {
@@ -40,7 +39,7 @@ const setNotificationSeen = async (id: string, isSeen: boolean) => {
 </script>
 
 <template>
-  <nav class="flex flex-grow justify-end items-center">
+  <nav class="flex flex-grow justify-end items-center min-h-[48px]">
     <client-only>
       <div test-id="notification-button" class="dropdown">
         <div tabindex="1" class="btn btn-ghost btn-circle">
@@ -59,7 +58,7 @@ const setNotificationSeen = async (id: string, isSeen: boolean) => {
               <div class="w-full flex justify-between">
                 <span :class="{'font-bold': !item.isSeen}">{{ item.title }}</span><span
                   class="text-xs">{{ $dayjs(item.created).format('DD MMM, YY') }}</span></div>
-              <div class="text-left w-full">{{ item.description }}</div>
+              <div class="text-left text-sm w-full">{{ item.description }}</div>
             </div>
           </li>
           <li v-if="!notification?.items.length">

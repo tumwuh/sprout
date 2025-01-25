@@ -107,6 +107,7 @@ const handleDelete = (index: number) => {
               :upload-temp-endpoint="false"
               rules="max:1024"
               :preview-url="`${baseApiUrl}/api/files/`"
+              :url="`${baseApiUrl}/api/files/`"
               :default="defaultValue.logo ? `${defaultValue.collectionId}/${defaultValue.id}/${defaultValue.logo}` : null"
               accept=".jpg,.png,.jpeg,svg,.webp"
               name="logo"
@@ -119,6 +120,7 @@ const handleDelete = (index: number) => {
           <FileElement
               name="pamflet"
               :preview-url="`${baseApiUrl}/api/files/`"
+              :url="`${baseApiUrl}/api/files/`"
               :default="defaultValue.logo ? `${defaultValue.collectionId}/${defaultValue.id}/${defaultValue.pamflet}` : null"
               :drop="true"
               :upload-temp-endpoint="false"

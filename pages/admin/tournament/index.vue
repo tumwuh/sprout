@@ -9,7 +9,8 @@ const {currentPage, itemPerPage, updatePage} = useDataTableFunction()
 
 const {data, status, refresh} = await useAsyncData('tournaments',
     async () => $pb.collection('tournaments').getList(currentPage.value, itemPerPage.value, {
-      filter: `managedBy = "${user!.id}"`
+      filter: `managedBy = "${user!.id}"`,
+      sort: '-created'
     }), {
       watch: [currentPage],
       lazy: true,
@@ -80,7 +81,7 @@ const activateTournament = async (id: string) => {
               <div class="flex items-center">
                 <nuxt-img provider="pocketbase"
                           :src="`${slotProps.item.collectionId}/${slotProps.item.id}/${slotProps.item.logo}`"
-                          width="50" height="50" class="rounded-md mr-2"/>
+                          width="50" height="50" class="rounded-md mr-2 bg-white"/>
                 <span>{{ slotProps.item.name }}</span>
               </div>
             </td>

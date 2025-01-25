@@ -84,18 +84,21 @@ const goTo = (path: string) => {
       </li>
     </ul>
     <div class="absolute bottom-4 flex-row flex justify-between items-center left-0 right-0">
-      <div class="flex flex-row gap-2">
-        <figure class="rounded-full">
-          <nuxt-img
-              :src="userStore.user?.avatar !== '' ? userStore.user?.avatar :  `https://api.dicebear.com/9.x/pixel-art/svg?seed=${userStore.user.name}`"
-              alt="Profile picture"
-              width="50"
-              height="50"
-              class="rounded-full"></nuxt-img>
-        </figure>
+      <div class="flex flex-row gap-2 items-center">
+        <nuxt-img
+            v-if="userStore.user?.avatar !== ''"
+            provider="pocketbase"
+            :src="`${userStore.user?.collectionId}/${userStore.user?.id}/${userStore.user?.avatar}`"
+            alt="Profile picture"
+            class="rounded-full w-[30px] h-[30px]"></nuxt-img>
+        <nuxt-img
+            v-else
+            :src="`https://api.dicebear.com/9.x/pixel-art/svg?seed=${userStore.user?.name}`"
+            alt="Profile picture"
+            class="rounded-full w-[30px] h-[30px]"></nuxt-img>
         <div class="flex flex-col">
-          <span class="font-bold text-gray-800 dark:text-gray-100 text-md ellipsis">{{ userStore.user.name }}</span>
-          <span class="font-medium text-gray-500 text-sm ellipsis">{{ userStore.user.email }}</span>
+          <span class="font-bold text-gray-800 dark:text-gray-100 text-md ellipsis text-sm max-w-[100px]">{{ userStore.user?.name }}</span>
+          <span class="font-medium text-gray-500 text-xs ellipsis">{{ userStore.user?.email }}</span>
 
         </div>
       </div>

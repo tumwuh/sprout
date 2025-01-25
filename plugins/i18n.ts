@@ -50,6 +50,7 @@ export default defineNuxtPlugin(({vueApp}) => {
                 isValid: 'Tervalidasi',
                 athlete: 'Atlet',
                 seeDetail: 'Lihat Detail',
+                match: 'Pertandingan',
 
                 // setting page
                 general: 'Pengaturan Umum',
@@ -106,6 +107,13 @@ export default defineNuxtPlugin(({vueApp}) => {
                 gold: 'Emas',
                 silver: 'Perak',
                 bronze: 'Perunggu',
+                addNewRound: 'Tambah putaran baru',
+                addKataMatch: 'Tambah grup pertandingan kata',
+                deleteRound: 'Hapus putaran',
+                doDraw: 'Lakukan pengundian',
+                notYetValid: 'Belum tervalidasi',
+                areYouSureWantToDraw: 'Apakah anda yakin ingin melakukan pengundian? Semua data pertandingan akan direset',
+                noRegistrant: 'Tidak ada pendaftar',
 
                 // Tournament registration page
                 registration: 'Pendaftaran',
@@ -115,6 +123,7 @@ export default defineNuxtPlugin(({vueApp}) => {
                 athletePicture: 'Foto Atlet',
                 gender: 'Jenis Kelamin',
                 man: 'Pria',
+                registartionFee: 'Biaya Pendaftaran',
                 woman: 'Wanita',
                 dob: 'Tanggal Lahir',
                 useExistingAthlete: 'Daftarkan Atlet yang Sudah Ada',
@@ -202,6 +211,7 @@ export default defineNuxtPlugin(({vueApp}) => {
                 processFailed: 'Proses gagal silahkan coba lagi',
                 duplicateRegistrant: 'Peserta sudah terdaftar',
                 duplicateAthleteInTeam: 'Ada atlet yang sama dalam satu tim, mohon cek kembali data kamu',
+                thisAthleteNotYetMetAgeRequirement: 'Atlet ini belum memenuhi batas usia yang ditentukan',
             }
         }
     })

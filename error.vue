@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const error = useError()
 const router = useRouter()
+console.log(error);
 </script>
 
 <template>

@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import {ref, watch} from 'vue';
+import {useMagicKeys} from "@vueuse/core";
+
+const {escape} = useMagicKeys()
+
+
 
 const props = defineProps({
   isOpen: Boolean,
@@ -17,6 +22,12 @@ watch(() => props.isOpen, (isOpen) => {
   }
 });
 
+watch(escape, (v) => {
+  if (v) {
+    closeModal()
+  }
+})
+
 const openModal = () => {
   modalRef.value?.showModal();
 };
@@ -33,14 +44,14 @@ const handleClose = () => {
 
 <template>
   <dialog ref="modalRef" class="modal">
-    <form method="dialog" class="modal-box">
-    <div class="flex justify-between">
-      <h3 class="font-bold text-lg mb-4">{{title}}</h3>
-      <Icon name="material-symbols:close-rounded" size="1.5em" class="cursor-pointer" @click="handleClose" />
-    </div>
+    <form method="dialog" class="modal-box" @submit.prevent>
+      <div class="flex justify-between">
+        <h3 class="font-bold text-lg mb-4">{{ title }}</h3>
+        <Icon name="material-symbols:close-rounded" size="1.5em" class="cursor-pointer" @click="handleClose"/>
+      </div>
       <slot name="content"></slot>
       <div class="modal-action">
-       <slot name="action"></slot>
+        <slot name="action"></slot>
       </div>
     </form>
   </dialog>

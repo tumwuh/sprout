@@ -21,7 +21,10 @@ const deletedItem = ref<string[]>([])
 const {isVisible, message, showToaster, variant} = useToaster()
 
 
-const {data: defaultValue, status} = await useAsyncData('tournament', () => $pb.collection('tournaments').getOne(route.params.id as string, {
+const {
+  data: defaultValue,
+  status
+} = await useAsyncData('tournament', () => $pb.collection('tournaments').getOne(route.params.id as string, {
   expand: 'categories'
 }), {
   lazy: true,
@@ -64,13 +67,18 @@ const handleSubmit = async (form: any) => {
 
     if (tournamentCategories.length > 0) {
       const records = await Promise.all(tournamentCategories.map(async (category: any) => {
+        const categoryData = {...category, tournament: route.params.id}
         if (category.id) {
-          return await $pb.collection('tournamentCategories').update(category.id, category, {requestKey: category.id})
+          return await $pb.collection('tournamentCategories').update(category.id, categoryData, {requestKey: category.id})
         } else {
-          return await $pb.collection('tournamentCategories').create(category, {requestKey: category.name})
+          return await $pb.collection('tournamentCategories').create(categoryData, {requestKey: category.name})
         }
       }))
-      tournamentFormData.append('categories', JSON.stringify(records.map((record: any) => record.id)))
+      records.forEach((record: any) => {
+        if (record.id) {
+          tournamentFormData.append('categories', record.id)
+        }
+      })
     }
 
     await $pb.collection('tournaments').update(route.params.id as string, tournamentFormData)
@@ -104,7 +112,8 @@ const handleSubmit = async (form: any) => {
       </div>
       <div class="flex justify-center">
         <div class="content-card w-full h-[77vh] overflow-auto">
-          <tournament-form v-if="status === 'success'" @category-delete="handleCategoryDelete" :is-submitting="isSubmitting" @submit="handleSubmit"
+          <tournament-form v-if="status === 'success'" @category-delete="handleCategoryDelete"
+                           :is-submitting="isSubmitting" @submit="handleSubmit"
                            :default="defaultValue"/>
           <div v-else>
             <div class="flex items-center justify-center h-[77vh] skeleton"></div>

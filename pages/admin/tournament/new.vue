@@ -83,10 +83,11 @@ const handleSubmit = async (form: any) => {
       tournament: tournament.id
     }, {requestKey: category.name})))
 
-    await $pb.collection('tournaments').update(tournament.id, {categories: categories.map((category: any) => category.id)})
+    await $pb.collection('tournaments').update(tournament.id, {categories: categories.map((category: any) => category.id)}, {requestKey: tournament.id})
 
     showToaster(t('successCreateTournament'), 3000, 'success')
     await router.push('/admin/tournament')
+
   } catch (e) {
     showToaster(t('failedCreateTournament'), 3000, 'error')
   } finally {

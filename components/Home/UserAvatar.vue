@@ -16,12 +16,17 @@ const goTo = (path: string) => {
   <div test-id="profile-avatar" v-if="userStore.user" class="dropdown dropdown-end">
     <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
       <div class="w-10 rounded-full">
-        <figure>
-          <nuxt-img
-              :src="userStore.user?.avatar !== '' ? userStore.user.avatar :  `https://api.dicebear.com/9.x/pixel-art/svg?seed=${userStore.user.name}`"
-              alt="Profile picture"
-              class="rounded-full"></nuxt-img>
-        </figure>
+        <nuxt-img
+            v-if="userStore.user?.avatar !== ''"
+            provider="pocketbase"
+            :src="`${userStore.user?.collectionId}/${userStore.user?.id}/${userStore.user?.avatar}`"
+            alt="Profile picture"
+            class="rounded-full"></nuxt-img>
+        <nuxt-img
+            v-else
+            :src="`https://api.dicebear.com/9.x/pixel-art/svg?seed=${userStore.user.name}`"
+            alt="Profile picture"
+            class="rounded-full"></nuxt-img>
       </div>
     </div>
     <ul
@@ -31,8 +36,9 @@ const goTo = (path: string) => {
         <Icon name="mdi-light:account" size="1.5em"/>
         <span class="hover:bg-transparent">{{ t('profile') }}</span>
       </li>
-      <li class="cursor-pointer hover:bg-base-300 px-4 py-2 flex flex-row items-center" @click="goTo('/my/registration')">
-        <Icon name="mdi-light:clipboard-text" size="1.5em" />
+      <li class="cursor-pointer hover:bg-base-300 px-4 py-2 flex flex-row items-center"
+          @click="goTo('/my/registration')">
+        <Icon name="mdi-light:clipboard-text" size="1.5em"/>
         <span class="hover:bg-transparent">{{ t('myRegistration') }}</span>
       </li>
       <li class="cursor-pointer hover:bg-base-300 px-4 py-2 flex flex-row items-center" @click="logOut">

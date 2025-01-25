@@ -1,4 +1,7 @@
+import {useMagicKeys} from "@vueuse/core";
+
 const useModalFunction = () => {
+    const {escape} = useMagicKeys()
     const showModal = ref(false)
 
 
@@ -9,6 +12,12 @@ const useModalFunction = () => {
     const closeModal = () => {
         showModal.value = false
     }
+
+    watch(escape, (v) => {
+        if (v) {
+            showModal.value = false
+        }
+    })
 
 
     return {

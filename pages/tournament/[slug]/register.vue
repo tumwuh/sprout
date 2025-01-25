@@ -31,10 +31,10 @@ const {data}: {
 } = await useAsyncData('tournamentDetail', async () => $pb.collection('tournaments').getFirstListItem(`slug = "${route.params.slug}"`, {
   expand: 'sportType,categories'
 }), {
-  server: true,
+  server: false,
 })
 
-selectedCategory.value = route.query.category ?? data.value.expand.categories[0].id
+selectedCategory.value = route?.query?.category ?? data.value?.expand?.categories[0]?.id
 
 if (!user) {
   await navigateTo({
@@ -57,35 +57,27 @@ const {
 const {
   data: registration,
   refresh: registrationRefresh
-} = await useAsyncData('registration', async () => $pb.collection('tournamentRegistration' as any).getFirstListItem(`team = "${user!.id}" && tournament = "${data.value.id}"`), {
+} = await useAsyncData('registration', async () => $pb.collection('tournamentRegistration' as any).getFirstListItem(`team = "${user!.id}" && tournament = "${data.value?.id}"`), {
   server: false,
 })
 
 
 useSeoMeta({
-  title: data.value.name,
-  ogTitle: data.value.name,
-  description: htmlToCleanText(data.value.description.slice(0, 160)),
-  ogDescription: htmlToCleanText(data.value.description.slice(0, 160)),
-  ogImage: `${baseApiUrl}/api/files/${data.value.collectionId}/${data.value.id}/${data.value.pamflet}`,
-  ogSiteName: 'Tumwuh',
-  ogUrl: `${webUrl}${route.fullPath}`,
-  twitterTitle: data.value.name,
-  twitterDescription: htmlToCleanText(data.value.description.slice(0, 160)),
-  twitterImage: `${baseApiUrl}/api/files/${data.value.collectionId}/${data.value.id}/${data.value.pamflet}`,
-  twitterCard: 'summary_large_image',
+  title: 'Pendaftaran Turnamen',
+  description: 'Daftarkan tim mu sekarang',
+
 })
 
 
 const categoriesWithKey = computed(() => {
-  return data.value.expand.categories.reduce((acc: any, item: any) => {
+  return data.value?.expand?.categories?.reduce((acc: any, item: any) => {
     acc[item.id] = item
     return acc
   }, {})
 })
 
 const listAthlete = computed(() => {
-  return athlete.value ? athlete.value.items.map((item: any) => ({
+  return athlete.value ? athlete.value.items?.map((item: any) => ({
     label: item.name,
     value: item.id
   })) : []
@@ -117,18 +109,18 @@ const handleSubmit = async (form$: any) => {
       showingErroBag.value = false
     }, 3000)
   }
-  const selectedCategory = categoriesWithKey.value[form$.data.category]
+  const categoryThatGotSelected = categoriesWithKey?.value[form$.data.category]
 
-  if (selectedCategory.isIndividual && form$.data.participantList.length > 1) {
+  if (categoryThatGotSelected.isIndividual && form$.data.participantList.length > 1) {
     showErrorBagForParticipantList(t('individualCategoryError'))
     return
   }
 
-  if (!selectedCategory.isIndividual) {
-    if (form$.data.participantList.length < selectedCategory.minTeamMember || form$.data.participantList.length > selectedCategory.maxTeamMember) {
+  if (!categoryThatGotSelected.isIndividual) {
+    if (form$.data.participantList.length < categoryThatGotSelected.minTeamMember || form$.data.participantList.length > categoryThatGotSelected.maxTeamMember) {
       showErrorBagForParticipantList(t('teamCategoryError', {
-        min: selectedCategory.minTeamMember,
-        max: selectedCategory.maxTeamMember
+        min: categoryThatGotSelected.minTeamMember,
+        max: categoryThatGotSelected.maxTeamMember
       }))
       return
     }
@@ -221,14 +213,14 @@ const handleSubmit = async (form$: any) => {
       description: t('newRegistrantForTournamentDescription', {
         team: user!.name,
         tournament: data.value.name,
-        category: selectedCategory.name
+        category: categoryThatGotSelected.name
       }),
     })
 
 
     await $pb.collection('tournamentRegistration' as any).update(registration.value!.id, {
       participantCount: registration.value!.participantCount + 1,
-      totalFee: registration.value!.totalFee + selectedCategory.registrationFee
+      totalFee: registration.value!.totalFee + categoryThatGotSelected.registrationFee
     })
 
 
@@ -303,28 +295,28 @@ const handleSubmit = async (form$: any) => {
             rules="required"
             :native="false"
             :default="route.query.category ?? data.expand.categories[0].id"
-            :items="data.expand.categories.map((item: any) => ({label: item.name, value: item.id}))"
+            :items="data?.expand?.categories?.map((item: any) => ({label: item.name, value: item.id}))"
             :columns="{
                 default: 12,
                 sm: 6
               }"
         />
         <StaticElement name="restrictionNotice">
-                <span v-if="categoriesWithKey[selectedCategory].isAgeRestriction" class="text-sm text-gray-500">*{{
+                <span v-if="categoriesWithKey && categoriesWithKey[selectedCategory]?.isAgeRestriction" class="text-sm text-gray-500">*{{
                     t('ageRestrictiveNotification', {
-                      min: categoriesWithKey[selectedCategory].minAge,
-                      max: categoriesWithKey[selectedCategory].maxAge
+                      min: categoriesWithKey[selectedCategory]?.minAge,
+                      max: categoriesWithKey[selectedCategory]?.maxAge
                     })
                   }}</span>
         </StaticElement>
         <StaticElement name="athleteTitle">
           <h1 class="text-2xl font-bold">{{ t('participantList') }}</h1>
-          <p v-if="categoriesWithKey[selectedCategory].isIndividual">{{ t('individualCategoryInfo') }}</p>
-          <p v-else>
+          <p v-if="categoriesWithKey && categoriesWithKey[selectedCategory]?.isIndividual">{{ t('individualCategoryInfo') }}</p>
+          <p v-else-if="categoriesWithKey">
             {{
               t('teamCategoryInfo', {
-                min: categoriesWithKey[selectedCategory].minTeamMember,
-                max: categoriesWithKey[selectedCategory].maxTeamMember
+                min: categoriesWithKey[selectedCategory]?.minTeamMember,
+                max: categoriesWithKey[selectedCategory]?.maxTeamMember
               })
             }}</p>
         </StaticElement>
@@ -421,7 +413,3 @@ const handleSubmit = async (form$: any) => {
     </client-only>
   </section>
 </template>
-
-<style scoped>
-
-</style>

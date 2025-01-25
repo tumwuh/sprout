@@ -3,69 +3,73 @@ import {useI18n} from "vue-i18n";
 
 const {baseApiUrl} = useRuntimeConfig().public
 definePageMeta({
-  layout: "setting",
-  middleware: ['auth-needed'],
+  layout: "admin",
+  middleware: ["is-admin", "only-organizer"],
   pageTransition: {
     name: 'slide-right',
     mode: 'out-in'
   },
 });
 
+const {t} = useI18n()
+
 useSeoMeta({
-  title: 'Daftar peserta',
+  title: t('tournamentRegistration'),
   description: 'Daftar peserta yang telah kamu daftarkan',
 })
 
 const {$pb, $dayjs} = useNuxtApp()
 const {currentPage, itemPerPage, updatePage} = useDataTableFunction()
-const isLoading = ref(false)
-const selectedId = ref('')
-const {showModal, openModal, closeModal} = useModalFunction()
-const {t} = useI18n()
+const route = useRoute()
 const {user} = useUserStore()
 const {data, status, refresh} = await useAsyncData('tournamentRegistration',
     async () => await $pb.collection('participants').getList(currentPage.value, itemPerPage.value, {
-      filter: `team = "${user!.id}"`,
-      expand: 'category,athletes'
+      filter: `registration = "${route.params.registration}"`,
+      expand: 'category,athletes,team'
     }), {
       watch: [currentPage],
-      server: false
+      server: true
     })
 
-const deleteRegistration = async () => {
-  isLoading.value = true
-  await $pb.collection('participants').delete(selectedId.value)
-  selectedId.value = ''
-  closeModal()
-  await refresh()
+
+const calculateAge = (dob: string, minAge: number, maxAge: number): boolean => {
+  const birthDate = new Date(dob);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDifference = today.getMonth() - birthDate.getMonth();
+
+  if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+
+  return age >= minAge && age <= maxAge
 }
 
-const showDeleteConfirmation = (id: string) => {
-  selectedId.value = id
-  openModal()
-}
 
 </script>
 
 <template>
   <section>
+    <div>
+      <h1 class="text-3xl font-semibold">{{ t('tournamentRegistration') }}</h1>
+      <div class="breadcrumbs text-sm">
+        <ul>
+          <li>
+            <nuxt-link to="/admin/dashboard">{{ t('dashboard') }}</nuxt-link>
+          </li>
+          <li>
+            <nuxt-link to="/admin/tournament">{{ t('tournamentTitle') }}</nuxt-link>
+          </li>
+          <li>
+            <nuxt-link :to="`/admin/tournament/${route.params.id}`">{{ t('tournamentDetail') }}</nuxt-link>
+          </li>
+          <li>
+            {{ t('tournamentRegistration') }}
+          </li>
+        </ul>
+      </div>
+    </div>
     <div class="content-card mb-8">
-      <modal :is-open="showModal" @on-close="closeModal" :title="t('deleteRegistration')">
-        <template #content>
-          <p>{{ t('deleteRegistrationConfirmation') }}</p>
-        </template>
-        <template #action>
-          <button :disabled="isLoading" @click="closeModal" class="btn btn-md ">
-            <Icon name="iconoir:cancel" size="1.5em"/>
-            {{ t('no') }}
-          </button>
-          <button @click.once="deleteRegistration" class="btn btn-md btn-primary">
-            <Icon v-if="isLoading" name="svg-spinners:180-ring" size="1.5em"/>
-            <Icon v-else name="iconoir:check" size="1.5em"/>
-            {{ t('yes') }}
-          </button>
-        </template>
-      </modal>
       <data-table :status="status"
                   :data="data?.items ?? []"
                   :col-span="8"
@@ -77,6 +81,7 @@ const showDeleteConfirmation = (id: string) => {
         <template #thead>
           <tr>
             <th></th>
+            <th>{{ t('teamName') }}</th>
             <th>{{ t('athlete') }}</th>
             <th>{{ t('category') }}</th>
             <th>{{ t('registartionFee') }}</th>
@@ -86,6 +91,7 @@ const showDeleteConfirmation = (id: string) => {
         </template>
         <template v-slot="slotProps">
           <td>{{ slotProps.index + 1 }}</td>
+          <td>{{ slotProps.item?.expand?.team?.name }}</td>
           <td>
             <div class="flex flex-col gap-2">
               <div v-for="item in slotProps.item?.expand?.athletes" :key="item.id" class="flex items-center gap-4">
@@ -95,6 +101,11 @@ const showDeleteConfirmation = (id: string) => {
                   <nuxt-img v-else :src="`https://api.dicebear.com/9.x/pixel-art/svg?seed=${item?.name}`"/>
                 </div>
                 <span>{{ item?.name }}</span>
+                <div
+                    v-if="slotProps.item?.expand?.category?.isAgeRestriction && !calculateAge(item.dob, slotProps.item?.expand?.category?.minAge, slotProps.item?.expand?.category?.maxAge)"
+                    class="tooltip" :data-tip="t('thisAthleteNotYetMetAgeRequirement')">
+                  <Icon name="lucide:info" size="1.5em"/>
+                </div>
               </div>
             </div>
           </td>
@@ -108,18 +119,10 @@ const showDeleteConfirmation = (id: string) => {
           </td>
           <td>{{ $dayjs(slotProps.item?.created).format('DD MMM, YY') }}</td>
           <td>
-            <div class="tooltip tooltip-left" :data-tip="t('deleteRegistration')">
-              <button @click="showDeleteConfirmation(slotProps.item.id)" class="btn btn-xs  btn-ghost ">
-                <Icon name="material-symbols:delete-outline-sharp" size="1.5em"/>
-              </button>
-            </div>
+
           </td>
         </template>
       </data-table>
     </div>
   </section>
 </template>
-
-<style scoped>
-
-</style>
