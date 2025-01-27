@@ -104,6 +104,7 @@ const closeDrawer = () => {
               <nuxt-link v-if="!userStore.user" to="/registration" class="btn btn-primary btn-sm">
                 {{ t('register') }}
               </nuxt-link>
+
             </li>
           </ul>
         </div>

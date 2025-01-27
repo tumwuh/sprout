@@ -11,16 +11,14 @@ definePageMeta({
 });
 
 const {$pb} = useNuxtApp()
-const {user} = useUserStore()
 const {baseApiUrl} = useRuntimeConfig().public
 const {t} = useI18n()
-const router = useRouter()
 const route = useRoute()
 
 
 
 useSeoMeta({
-  title: 'Daftar Pendaftar Turnamen',
+  title: 'Tournament Detail',
   description: 'Daftar pendaftar pada turnamen yang kamu kelola',
 })
 
@@ -35,6 +33,7 @@ const activeTab = ref(0)
 const dataTabs = ref([
   {key: 'registrant', label: t('registrant'), active: true, icon: 'uil:create-dashboard'},
   {key: 'category', label: t('category'), icon: 'lucide:file-spreadsheet'},
+  {key: 'tatami', label: t('tatami'), icon: 'lucide:file-sliders'},
 ])
 
 
@@ -88,7 +87,10 @@ const handleTabChange = (tab: number) => {
               <admin-tournament-registrant-data  v-if="activeTab === 0"/>
             </transition>
             <transition name="slide-right">
-              <tournament-category-tab :tournament-id="route.params.id" :is-for-organizer="true" v-if="activeTab === 1"/>
+              <tournament-category-tab :tournament-id="route.params.id as string" :is-for-organizer="true" v-if="activeTab === 1"/>
+            </transition>
+            <transition name="slide-right">
+              <admin-tournament-tatami  :is-for-organizer="true" v-if="activeTab === 2"/>
             </transition>
           </div>
         </div>

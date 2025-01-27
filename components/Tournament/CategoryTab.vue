@@ -16,16 +16,19 @@ const props = defineProps({
 })
 
 const {data, status} = await useAsyncData('category', async () => $pb.collection('tournamentCategories').getList(1, 50, {
-  filter: `tournament = "${props.tournamentId}"`
-}))
+  filter: `tournament = "${props.tournamentId}"`,
+}), {
+  server: false,
+  lazy: true
+})
 
 </script>
 
 <template>
   <section class="py-12">
-    <div v-if="status === 'success'" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div v-if="status === 'success'" class="flex flex-wrap gap-4">
       <div v-for="item in data?.items" :key="item.id"
-           class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+           class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 w-[300px]">
         <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ item.name }}</h5>
         <div class="flex flex-wrap mb-4 gap-2">
           <div class="badge badge-primary text-white">
@@ -55,9 +58,9 @@ const {data, status} = await useAsyncData('category', async () => $pb.collection
         </nuxt-link>
       </div>
     </div>
-    <div v-else class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div v-else class="flex flex-wrap gap-4">
       <div v-for="item in [1,2,3,4,5,6]" :key="item"
-           class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+           class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 w-[300px]">
         <h5 class="mb-2 skeleton h-[20px] w-2/4"></h5>
         <div class="flex flex-wrap mb-4 gap-2">
           <div class="skeleton h-[20px] w-3/4"></div>

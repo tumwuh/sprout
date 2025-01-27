@@ -51,6 +51,7 @@ export default defineNuxtPlugin(({vueApp}) => {
                 athlete: 'Atlet',
                 seeDetail: 'Lihat Detail',
                 match: 'Pertandingan',
+                tatami: 'Tatami',
 
                 // setting page
                 general: 'Pengaturan Umum',

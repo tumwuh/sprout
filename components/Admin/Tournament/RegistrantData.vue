@@ -17,7 +17,8 @@ const {data, status, refresh} = await useAsyncData('tournamentRegistration',
       sort: '-created'
     }), {
       watch: [currentPage],
-      server: false
+      server: false,
+      lazy: true
     })
 
 
