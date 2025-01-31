@@ -97,7 +97,7 @@ const generateAllData = async () => {
 </script>
 
 <template>
-  <section>
+  <section class="mb-[40px]">
     <modal :isOpen="showDrawValidation" :title="t('doDraw')" @on-close="closeDrawValidation">
       <template #content>
         <p>{{ t('areYouSureWantToDraw') }}</p>

@@ -4,9 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .slide-left-enter-active,
-.slide-left-leave-active,
+.slide-left-leave-active{
+    transition: all 0.3s;
+}
+
 .slide-right-enter-active,
 .slide-right-leave-active {
     transition: all 0.2s;

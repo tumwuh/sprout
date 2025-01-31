@@ -47,8 +47,17 @@ useSeoMeta({
         </ul>
       </div>
     </div>
-    <admin-tournament-category-registrant :id="route.params.category" :scoring-type="data?.expand?.scoring?.name ?? ''"></admin-tournament-category-registrant>
-    <admin-tournament-kata-round v-if="data?.expand?.scoring?.name === 'Kata'"></admin-tournament-kata-round>
-    <admin-tournament-kumite-round v-else-if="data?.expand?.scoring?.name === 'Kumite'"></admin-tournament-kumite-round>
+    <admin-tournament-category-registrant
+        :id="route.params.category as string"
+        :scoring-type="data?.expand?.scoring?.name ?? ''"
+    ></admin-tournament-category-registrant>
+    <admin-tournament-kata-round
+        v-if="data?.expand?.scoring?.name === 'Kata'"
+        :category-id="route.params.category as string"
+    ></admin-tournament-kata-round>
+    <admin-tournament-kumite-round
+        v-else-if="data?.expand?.scoring?.name === 'Kumite'"
+        :category-id="route.params.category as string"
+    ></admin-tournament-kumite-round>
   </section>
 </template>

@@ -1,3 +1,8 @@
+import {sort} from 'ramda';
+const shuffleArray = <T>(array: T[]): T[] => {
+    return sort(() => Math.random() - 0.5, array);
+};
+
 export default function prepareKumiteMatchData(participant: {[key: string]: any}[]) {
     const config = useRuntimeConfig().public
 
@@ -99,7 +104,7 @@ export default function prepareKumiteMatchData(participant: {[key: string]: any}
         round = roundRule[64].round
     }
     const match = []
-    let copyOfParticipant = [...participant]
+    let copyOfParticipant = shuffleArray([...participant])
     while (copyOfParticipant.length > 0) {
         const contestants = copyOfParticipant.splice(0, 2)
         match.push({

@@ -115,6 +115,9 @@ export default defineNuxtPlugin(({vueApp}) => {
                 notYetValid: 'Belum tervalidasi',
                 areYouSureWantToDraw: 'Apakah anda yakin ingin melakukan pengundian? Semua data pertandingan akan direset',
                 noRegistrant: 'Tidak ada pendaftar',
+                openTatamiMatch: 'Buka Tatami',
+                addNewTatami: 'Tambah tatami baru',
+                removeTatami: 'Hapus tatami',
 
                 // Tournament registration page
                 registration: 'Pendaftaran',
@@ -201,12 +204,20 @@ export default defineNuxtPlugin(({vueApp}) => {
                 description: 'Deskripsi',
 
 
+                // Tatami page
+                listCategory: 'Daftar Kategori',
+                highlightMatch: 'Sorot Pertandingan',
+                unHighLightMatch: 'Hapus Sorotan Pertandingan',
+
+
                 // Brand identity
                 headline: 'Tumbuh dan berkembang bersama kami.',
 
 
                 // Error message
                 generalUnauthorized: 'Anda tidak diizinkan',
+                generalDataNotFound: 'Data tidak ditemukan',
+                generalDataNotFoundMessage: 'Data yang anda cari tidak ditemukan atau terjadi kesalahan, silakan coba lagi',
                 onlyAdminMessage: 'Hanya admin yang dizinkan mengakses menu ini, anda tidak berhak mengasesnya !',
                 onlyOrganizer: 'Hanya organizer yang dizinkan mengakses menu ini, anda tidak berhak mengasesnya !',
                 processFailed: 'Proses gagal silahkan coba lagi',
