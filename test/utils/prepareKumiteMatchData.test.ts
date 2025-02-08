@@ -1,6 +1,17 @@
 import {describe, it, expect} from 'vitest';
 import prepareKumiteMatchData from '../../utils/prepareKumiteMatchData';
 
+import { mockNuxtImport } from '@nuxt/test-utils/runtime'
+
+mockNuxtImport("useRuntimeConfig", () => {
+    return () => {
+        return {
+            public: {
+                baseApiUrl: "http://localhost:3000"
+            },
+        }
+    }
+})
 describe('prepareKumiteMatchData', () => {
     it('should prepare match data correctly for 2 participants', () => {
         const participants = [
@@ -151,7 +162,7 @@ describe('prepareKumiteMatchData', () => {
         const result = prepareKumiteMatchData(participants);
 
 
-        expect(result.contestant['1'].player.nationality).toBe('/api/files/team1/1/avatar1');
+        expect(result.contestant['1'].player.nationality).toBe('http://localhost:3000/api/files/team1/1/avatar1');
         expect(result.contestant['2'].player.nationality).toBe('/tumwuh-leaf.png');
         expect(result.contestant['3'].player.nationality).toBe('/tumwuh-leaf.png');
     });

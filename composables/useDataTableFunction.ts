@@ -1,3 +1,4 @@
+import {ref } from "vue"
 const useDataTableFunction = (startPage: number = 1, startItemPerPage: number = 10) => {
     const currentPage = ref(startPage)
     const itemPerPage = ref(startItemPerPage)

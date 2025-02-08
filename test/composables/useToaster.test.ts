@@ -1,5 +1,9 @@
 import { describe, it, expect, vi } from 'vitest'
 import { useToaster } from '@/composables/useToaster'
+import {fakeTimers} from "~/test/fakeTimer"
+
+
+const clock = fakeTimers();
 
 describe('useToaster', () => {
   it('should initialize with default values', () => {
@@ -13,16 +17,15 @@ describe('useToaster', () => {
     const testMessage = 'Test message'
     const testDuration = 3000
 
-    vi.useFakeTimers()
 
     showToaster(testMessage, testDuration, "success")
 
     expect(message.value).toBe(testMessage)
     expect(isVisible.value).toBe(true)
 
-    vi.advanceTimersByTime(testDuration)
+    clock.tick(testDuration);
     expect(isVisible.value).toBe(false)
 
-    vi.useRealTimers()
+    clock.uninstall()
   })
 })
