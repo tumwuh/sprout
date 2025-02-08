@@ -75,6 +75,9 @@ export default defineNuxtConfig({
             autoprefixer: {},
         },
     },
+    ogImage: {
+      enable: false
+    },
     runtimeConfig: {
         sessionPassword: process.env.SESSION_PASSWORD,
         public: {
@@ -91,6 +94,7 @@ export default defineNuxtConfig({
         '@nuxtjs/seo',
         '@nuxtjs/sitemap',
         '@nuxtjs/robots',
+        '@nuxt/fonts',
     ],
     site: {
         url: process.env.WEB_URL,

@@ -1,12 +1,12 @@
-import {usePreferredDark, useWindowSize} from "@vueuse/core";
+import {useEventBus, usePreferredDark} from "@vueuse/core";
+import {selectedKumiteMatch} from "~/uniqueEventKey";
 export default function useBracketMatch(){
     const isDark = usePreferredDark()
-
-    const {width} = useWindowSize()
+    const selectKumiteMatchBus = useEventBus(selectedKumiteMatch)
 
     const bracketStyle = {
         width: '100%',
-        height: '500px',
+        height: '450px',
         connectionLinesWidth: 2,
         connectionLinesColor: "#5b5b5b",
         navButtonArrowSize: 25,
@@ -37,7 +37,10 @@ export default function useBracketMatch(){
         },
         getPlayerTitleHTML: (player: any) => {
             return `<span title="${player.title}" class="ellipsis inline-block" style="font-size: 18px; font-family: sans-serif; color: ${isDark ? "#7d7d7d" : "#2e2e2e"}; width: 120px;">${player.title}</span>`
-        }
+        },
+        onMatchClick: match => {
+            selectKumiteMatchBus.emit(match);
+        },
     }
 
    return {bracketStyle}

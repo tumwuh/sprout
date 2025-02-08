@@ -42,7 +42,10 @@ const highLightMatch = async (id: string) => {
     </div>
     <div v-if="listCategoryStatus === 'success'" class="flex flex-col gap-2">
       <div v-for="item in listCategory" :key="item.id" class="px-2 py-4 text-left rounded bg-base-200">
-        <h3 class="font-sans font-medium text-md mb-2 ">{{ item.name }}</h3>
+        <div class="flex justify-between items-center">
+          <h3 class="font-sans font-medium text-md mb-2 ">{{ item.name }}</h3>
+          <Icon v-if="item.id === props.categoryId" name="iconoir:eye-solid" width="24" height="24" />
+        </div>
         <button class="btn btn-ghost btn-sm" @click="highLightMatch(item.id)">
           <Icon name="iconoir:eye" width="24" height="24" />
           {{t('highlightMatch')}}

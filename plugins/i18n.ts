@@ -119,6 +119,8 @@ export default defineNuxtPlugin(({vueApp}) => {
                 addNewTatami: 'Tambah tatami baru',
                 removeTatami: 'Hapus tatami',
 
+
+
                 // Tournament registration page
                 registration: 'Pendaftaran',
                 tournamentRegistration: 'Pendaftaran Turnamen',
@@ -208,6 +210,9 @@ export default defineNuxtPlugin(({vueApp}) => {
                 listCategory: 'Daftar Kategori',
                 highlightMatch: 'Sorot Pertandingan',
                 unHighLightMatch: 'Hapus Sorotan Pertandingan',
+                matchDetail: 'Detail Pertandingan',
+                addSecond: 'Tambah 1 Detik',
+                subtractSecond: 'Kurangi 1 Detik',
 
 
                 // Brand identity

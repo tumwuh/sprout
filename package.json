@@ -12,6 +12,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@nuxt/fonts": "0.10.3",
     "@nuxt/icon": "^1.7.5",
     "@nuxt/image": "^1.8.1",
     "@nuxtjs/robots": "^5.0.0",

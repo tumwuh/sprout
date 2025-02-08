@@ -13,7 +13,6 @@ const {
 }))
 
 
-
 if (tatamiError.value) {
   throw createError({
     statusCode: 404,
@@ -56,13 +55,12 @@ useSeoMeta({
           :tournamentId="tatami!.expand?.tournament.id"
           :categoryId="tatami!.category"
       ></admin-tatami-category-control>
-      <div class="flex flex-grow flex-col gap-8">
+      <div class="flex flex-grow flex-col">
         <div class="w-full h-1/2">
-          <div>
-            <h1 class="text-3xl capitalize font-bold">{{ tatami?.expand?.tournament.name }}</h1>
-          </div>
+          <h1 class="text-3xl capitalize font-bold">{{ tatami?.expand?.tournament.name }}</h1>
+          <admin-tatami-scoring-detail></admin-tatami-scoring-detail>
         </div>
-        <div class="w-full h-1/2 ">
+        <div class="w-full h-1/2">
           <admin-tatami-group-match :categoryId="tatami!.category"></admin-tatami-group-match>
         </div>
       </div>

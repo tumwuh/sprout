@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import useBracketMatch from "~/composables/useBracketMatch";
 import {useEventBus} from "@vueuse/core";
-import {generateKumiteDone, generateKumiteMatch} from "~/uniqueEventKey";
+import {generateKumiteDone, generateKumiteMatch, selectedKumiteMatch} from "~/uniqueEventKey";
 
 
 const props = defineProps({
@@ -13,8 +13,11 @@ const props = defineProps({
 
 const {$pb} = useNuxtApp()
 const route = useRoute()
+const {bracketStyle} = useBracketMatch()
 const generateKumiteMatchBus = useEventBus(generateKumiteMatch)
 const generateKumiteDoneBus = useEventBus(generateKumiteDone)
+const selectKumiteMatchBus = useEventBus(selectedKumiteMatch)
+
 const {
   data,
   status,
@@ -54,7 +57,6 @@ const renderBracket = async () => {
       matches: processedMatch,
       contestants: preparedData.contestant,
     };
-
 
     createBracket(tournamentData, bracketRef.value as HTMLElement, bracketStyle);
   }
@@ -98,7 +100,15 @@ generateKumiteMatchBus.on(async () => {
   }
 
 })
-const {bracketStyle} = useBracketMatch()
+
+
+selectKumiteMatchBus.on(async (data: any) => {
+  $pb.collection('tatami').update(route.params.id, {
+    kumiteMatch: data.id,
+    kataContestant: null
+  })
+})
+
 </script>
 
 <template>
