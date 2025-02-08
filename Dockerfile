@@ -12,7 +12,7 @@ ARG SESSION_PASSWORD
 
 
 # Copy the package.json and bun.lockb files
-COPY package.json bun.lockb ./
+COPY package.json ./
 
 # Install dependencies
 RUN bun install
