@@ -7,7 +7,7 @@ export default defineNuxtConfig({
     devtools: {enabled: true},
     nitro: {
         compressPublicAssets: true,
-        preset: 'node',
+        preset: process.env.NODE_ENV === 'production' ? 'bun' : 'node',
         prerender: {
             routes: ['/'],
         },
