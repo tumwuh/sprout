@@ -4,6 +4,7 @@ export default defineVitestConfig({
         environment: 'nuxt', // Use 'jsdom' if you prefer
         globals: true, // Enable global APIs like `describe`, `it`, etc.
         include: ['test/**/*.test.ts'],
+        exclude: ['e2e/**/*.spec.ts'],
         coverage: {
             reporter: ['text', 'html'], // Generate coverage reports
         }
