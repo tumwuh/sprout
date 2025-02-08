@@ -31,7 +31,7 @@ WORKDIR /app
 
 # Copy only the necessary files from the builder stage
 COPY --from=builder /app/.output /app/.output
-COPY --from=builder /app/package.json /app/bun.lockb /app/
+COPY --from=builder /app/package.json /app/
 
 # Install only production dependencies
 RUN bun install
