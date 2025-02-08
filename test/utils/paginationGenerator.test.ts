@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import paginationGenerator from "~/utils/paginationGenerator";
 
 describe('paginationGenerator', () => {
     it('should generate pagination for the first page', () => {

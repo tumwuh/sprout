@@ -1,27 +1,37 @@
 <script setup lang="ts">
 import useBracketMatch from "~/composables/useBracketMatch";
 import {useEventBus} from "@vueuse/core";
-import {generateKumiteDone, generateKumiteMatch} from "~/uniqueEventKey";
+import {generateKumiteDone, generateKumiteMatch, selectedKumiteMatch} from "~/uniqueEventKey";
 
+
+const props = defineProps({
+  categoryId: {
+    type: String,
+    required: true
+  }
+})
 
 const {$pb} = useNuxtApp()
 const route = useRoute()
+const {bracketStyle} = useBracketMatch()
 const generateKumiteMatchBus = useEventBus(generateKumiteMatch)
 const generateKumiteDoneBus = useEventBus(generateKumiteDone)
+const selectKumiteMatchBus = useEventBus(selectedKumiteMatch)
+
 const {
   data,
   status,
   refresh
 } = await useAsyncData('kumite-round', async () => {
   const roundQuery = $pb.collection('kumiteRound').getFullList({
-    filter: `category = '${route.params.category}'`,
+    filter: `category = '${props.categoryId}'`,
   })
   const matchQuery = $pb.collection('kumiteMatch').getFullList({
-    filter: `category = '${route.params.category}'`,
+    filter: `category = '${props.categoryId}'`,
     expand: 'sides'
   })
   const contestantsQuery = $pb.collection('participants').getFullList({
-    filter: `category = '${route.params.category}'`,
+    filter: `category = '${props.categoryId}'`,
     expand: 'athletes,team',
     requestKey: 'contestants'
   })
@@ -48,7 +58,6 @@ const renderBracket = async () => {
       contestants: preparedData.contestant,
     };
 
-
     createBracket(tournamentData, bracketRef.value as HTMLElement, bracketStyle);
   }
 }
@@ -70,7 +79,7 @@ generateKumiteMatchBus.on(async () => {
     const preparedData = prepareKumiteMatchData(data.value[2])
     const insertRoundReq = preparedData.round.map((e: any) => $pb.collection('kumiteRound').create({
       ...e,
-      category: route.params.category,
+      category: props.categoryId,
       tournament: route.params.id
     }, {requestKey: `create-round-${e.roundIndex}`}))
     const insertRoundRes = await Promise.all(insertRoundReq)
@@ -81,7 +90,7 @@ generateKumiteMatchBus.on(async () => {
       }, {requestKey: `create-side-${e.contestantId}`})))
       await $pb.collection('kumiteMatch').create({
         ...match,
-        category: route.params.category,
+        category: props.categoryId,
         round: insertRoundRes[0].id,
         sides: sides.map(e => e.id)
       }, {requestKey: `create-match-${match.roundIndex}-${match.order}`});
@@ -91,12 +100,20 @@ generateKumiteMatchBus.on(async () => {
   }
 
 })
-const {bracketStyle} = useBracketMatch()
+
+
+selectKumiteMatchBus.on(async (data: any) => {
+  $pb.collection('tatami').update(route.params.id, {
+    kumiteMatch: data.id,
+    kataContestant: null
+  })
+})
+
 </script>
 
 <template>
-  <section v-if="status === 'success'" class="content-card max-h-[700px]">
-    <div ref="bracket" class="w-full"></div>
+  <section v-if="status === 'success'" class="content-card">
+    <div ref="bracket" class="w-full h-full"></div>
   </section>
   <section v-if="status === 'pending' || status === 'idle'" class="content-card h-[500px] skeleton"></section>
 </template>

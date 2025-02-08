@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {useI18n} from "vue-i18n";
+import truncateText from "~/utils/truncatingText";
 
 const props = defineProps({
   group: {
@@ -13,9 +14,10 @@ const {t} = useI18n()
 
 const {$pb} = useNuxtApp()
 
-const {data, status, refresh} = await useAsyncData(`kataContestant-${props.group}`,
+const {data, status} = await useAsyncData(`kataContestant-${props.group}`,
     async () => await $pb.collection('kataContestant').getFullList({
       filter: `group="${props.group}"`,
+      expand: 'athletes, athletes.team',
       requestKey: props.group
     }), {
       server: false,
@@ -42,7 +44,31 @@ const {data, status, refresh} = await useAsyncData(`kataContestant-${props.group
       </template>
       <template v-slot="slotProps">
         <td>{{ slotProps.index + 1 }}</td>
-        <td>{{ slotProps.item.name }}</td>
+        <td>
+          <div class="flex gap-2">
+           <div>
+             <nuxt-img
+                 v-if="slotProps.item?.expand?.athletes[0].expand.team.logo"
+                 :src="slotProps.item?.expand?.athletes[0].expand.team.logo"
+                 width="25" height="25"
+                 class="rounded-full bg-white"
+             />
+             <nuxt-img
+                 v-else
+                 src="/tumwuh-leaf.png"
+                 width="25" height="25"
+                 class="rounded-full bg-white"
+             />
+           </div>
+            <div>
+              <ul class="list-disc list-inside">
+                <li v-for="item in slotProps.item?.expand?.athletes" :key="item.id" class="tooltip" :data-tip="item.name">
+                  {{ truncateText(item.name, 15) }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </td>
         <td>
           <div class="flex w-[100px] justify-between">
             <span>1 <sup class="line-through">5</sup></span>

@@ -36,10 +36,15 @@ const goTo = (path: string) => {
         <Icon name="mdi-light:account" size="1.5em"/>
         <span class="hover:bg-transparent">{{ t('profile') }}</span>
       </li>
-      <li class="cursor-pointer hover:bg-base-300 px-4 py-2 flex flex-row items-center"
+      <li v-if="userStore.user.role === 'team'" class="cursor-pointer hover:bg-base-300 px-4 py-2 flex flex-row items-center"
           @click="goTo('/my/registration')">
         <Icon name="mdi-light:clipboard-text" size="1.5em"/>
         <span class="hover:bg-transparent">{{ t('myRegistration') }}</span>
+      </li>
+      <li v-if="['organizer', 'admin'].includes(userStore.user.role)" class="cursor-pointer hover:bg-base-300 px-4 py-2 flex flex-row items-center"
+          @click="goTo('/admin/dashboard')">
+        <Icon name="iconoir:dashboard-dots" size="1.5em"/>
+        <span class="hover:bg-transparent">{{ t('dashboard') }}</span>
       </li>
       <li class="cursor-pointer hover:bg-base-300 px-4 py-2 flex flex-row items-center" @click="logOut">
         <Icon name="material-symbols-light:logout" size="1.5em"/>

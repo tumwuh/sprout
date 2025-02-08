@@ -1,3 +1,8 @@
+import {sort} from 'ramda';
+const shuffleArray = <T>(array: T[]): T[] => {
+    return sort(() => Math.random() - 0.5, array);
+};
+
 export default function prepareKataMatchData(data: {[key:string]: any}[], category: string, tournament: string, personPerGroup: number = 5) {
     // First Round
     const firstRound = {
@@ -6,7 +11,7 @@ export default function prepareKataMatchData(data: {[key:string]: any}[], catego
     }
 
     // All contestants
-    const contestant = data.map((participant: {[key:string]: any}) => ({
+    const contestant = shuffleArray(data.map((participant: {[key:string]: any}) => ({
         category,
         athletes: participant.athletes,
         score: {
@@ -30,7 +35,7 @@ export default function prepareKataMatchData(data: {[key:string]: any}[], catego
         isGold: false,
         isSilver: false,
         isBronze: false,
-    }))
+    })))
 
     // Generate match
     const match = Array.from({ length: Math.ceil(contestant.length / personPerGroup) }, (_, index) => ({

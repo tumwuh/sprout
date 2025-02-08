@@ -3,6 +3,16 @@ import {useI18n} from "vue-i18n";
 import {useEventBus, useMagicKeys} from "@vueuse/core";
 import {refreshMatchGroup} from "~/uniqueEventKey";
 
+
+
+const props = defineProps({
+  categoryId: {
+    type: String,
+    required: true
+  }
+})
+
+
 const {escape} = useMagicKeys()
 
 watch(escape, (v) => {
@@ -18,12 +28,14 @@ const bus = useEventBus(refreshMatchGroup)
 
 
 const route = useRoute()
-const {data: roundGroup, status, refresh} = await useAsyncData(`kataRoundGroup-${route.params.category}`,
+const {data: roundGroup, status, refresh} = await useAsyncData(`kataRoundGroup-${props.categoryId}`,
     async () => await $pb.collection('kataRoundGroup').getFullList({
-      filter: `category="${route.params.category}"`,
+      filter: `category="${props.categoryId}"`,
       sort: 'created'
     }), {
-      server: true
+      server: false,
+      lazy: false,
+      watch: [props]
     })
 
 
@@ -62,7 +74,7 @@ const deleteRound = async (id: string) => {
 </script>
 
 <template>
-  <section class="max-h-[50vh] mt-[40px] max-w-[80vw] overflow-x-auto">
+  <section class="max-h-[50vh] max-w-[80vw] overflow-x-auto">
     <div class="flex min-h-[20vh] gap-4">
       <div v-for="(item) in roundGroup" :key="item.id" class="min-w-[600px]">
         <div
